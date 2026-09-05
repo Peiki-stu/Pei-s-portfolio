@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>陌生益所｜品牌網頁視覺 — 郭佩綺 作品集</title>
+  <meta name="description" content="陌生益所：品牌網頁視覺、視覺企劃與活動設計、上架流程與工具開發。">
+  
+  <!-- 字型 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@400;500;600&display=swap" rel="stylesheet">
+  
+  <style>
+    :root {
+      --bg: #fdfbf4;
+      --text: #2b2725;
+      --text-muted: #6b635e;
+      --accent: #967155;
+      --line: rgba(150, 113, 85, 0.18);
+      --font-title: "Noto Serif TC", serif;
+      --font-body: "Noto Sans TC", sans-serif;
+      --max-width: 960px;
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+
+      --space-xs: 0.5rem;
+      --space-sm: 1rem;
+      --space-md: 1.5rem;
+      --space-lg: 2.5rem;
+      --space-xl: 3.8rem;
+      --space-xxl: 5.5rem;
+    }
+
+    [data-theme="dark"] {
+      --bg: #12100e;
+      --text: #f2ece4;
+      --text-muted: #a39990;
+      --accent: #d99b64;
+      --line: rgba(217, 155, 100, 0.2);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 2.05;
+      letter-spacing: 1.5px;
+      text-rendering: optimizeLegibility;
+      transition: background-color 0.3s var(--ease-smooth), color 0.3s var(--ease-smooth);
+      padding-bottom: var(--space-xxl);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(92%, var(--max-width));
+      margin: 0 auto;
+    }
+
+    /* 頂部導覽 */
+    .site-header {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      background: rgba(253, 251, 244, 0.88);
+      border-bottom: 1px solid var(--line);
+      z-index: 40;
+      transition: background-color 0.3s var(--ease-smooth);
+    }
+
+    [data-theme="dark"] .site-header {
+      background: rgba(18, 16, 14, 0.88);
+    }
+
+    .nav {
+      width: min(92%, var(--max-width));
+      margin: 0 auto;
+      min-height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brand {
+      font-family: var(--font-title);
+      letter-spacing: 2.5px;
+      font-size: 0.95rem;
+      font-weight: 500;
+    }
+
+    .theme-toggle-btn {
+      background: transparent;
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: 0.35rem 0.8rem;
+      font-size: 0.82rem;
+      cursor: pointer;
+      border-radius: 20px;
+      transition: transform 0.35s var(--ease-spring), border-color 0.25s ease, color 0.25s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .theme-toggle-btn:hover {
+      transform: scale(1.05);
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    /* 首頁介紹 */
+    .hero {
+      padding: var(--space-xl) 0 var(--space-lg);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      letter-spacing: 3px;
+      font-size: 0.75rem;
+      margin-bottom: var(--space-xs);
+    }
+
+    h1 {
+      font-family: var(--font-title);
+      font-size: clamp(2rem, 5vw, 2.75rem);
+      font-weight: 500;
+      line-height: 1.35;
+      letter-spacing: 2.5px;
+      margin-bottom: var(--space-xs);
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-title);
+      font-size: clamp(1.05rem, 3vw, 1.35rem);
+      color: var(--accent);
+      letter-spacing: 2px;
+      margin-bottom: var(--space-md);
+      font-weight: 400;
+    }
+
+    .brief-text {
+      max-width: 820px;
+      font-size: 0.95rem;
+      color: var(--text);
+      line-height: 2.1;
+      margin-bottom: var(--space-md);
+    }
+
+    /* 合作歷程說明框 */
+    .career-note {
+      border: 1px solid var(--line);
+      background: rgba(150, 113, 85, 0.035);
+      padding: 1.25rem 1.5rem;
+      margin-bottom: var(--space-lg);
+      max-width: 840px;
+    }
+
+    [data-theme="dark"] .career-note {
+      background: rgba(217, 155, 100, 0.04);
+    }
+
+    .career-note-title {
+      font-family: var(--font-title);
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 2px;
+      margin-bottom: 0.35rem;
+    }
+
+    .career-note p {
+      font-size: 0.86rem;
+      line-height: 2;
+      color: var(--text-muted);
+      margin: 0;
+    }
+
+    /* 核心資訊欄 */
+    .meta-table {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: var(--space-sm);
+      padding: 1.2rem 0;
+      margin-bottom: var(--space-lg);
+    }
+
+    .meta-col .label {
+      display: block;
+      font-size: 0.72rem;
+      letter-spacing: 2px;
+      color: var(--text-muted);
+      margin-bottom: 0.2rem;
+    }
+
+    .meta-col .value {
+      font-size: 0.86rem;
+      color: var(--text);
+      font-weight: 500;
+      line-height: 1.5;
+    }
+
+    /* 細線分區 */
+    .case-section {
+      padding: var(--space-lg) 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      color: var(--accent);
+      letter-spacing: 3px;
+      margin-bottom: var(--space-xs);
+    }
+
+    h2 {
+      font-family: var(--font-title);
+      font-size: clamp(1.35rem, 3.8vw, 1.75rem);
+      font-weight: 500;
+      letter-spacing: 2.5px;
+      margin-bottom: var(--space-md);
+      line-height: 1.4;
+    }
+
+    /* 重點項目清單 (純粹一至三句) */
+    .point-block {
+      margin-bottom: var(--space-md);
+    }
+
+    .point-title {
+      font-family: var(--font-title);
+      font-size: 0.98rem;
+      color: var(--text);
+      letter-spacing: 1.5px;
+      margin-bottom: 0.25rem;
+      font-weight: 500;
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+    }
+
+    .point-title::before {
+      content: "✦";
+      font-size: 0.75rem;
+      color: var(--accent);
+    }
+
+    .point-desc {
+      color: var(--text-muted);
+      font-size: 0.92rem;
+      line-height: 2.05;
+      padding-left: 1.25rem;
+    }
+
+    /* 平面極簡 Mockup 背景底襯 */
+    .flat-stage {
+      background: rgba(150, 113, 85, 0.035);
+      border: 1px solid var(--line);
+      padding: 1.5rem;
+      margin: var(--space-md) 0;
+    }
+
+    [data-theme="dark"] .flat-stage {
+      background: rgba(217, 155, 100, 0.03);
+    }
+
+    /* 區塊一：網站不對稱網格 (一大一小，平面自然輕投影) */
+    .asym-web-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .flat-frame {
+      border: 1px solid var(--line);
+      background: var(--bg);
+      box-shadow: 0 4px 20px rgba(43, 39, 37, 0.05);
+      overflow: hidden;
+    }
+
+    .scroll-frame {
+      max-height: 520px;
+      overflow-y: auto;
+    }
+
+    .caption {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      letter-spacing: 1.5px;
+      margin-top: 0.4rem;
+    }
+
+    /* 區塊二：活動宣傳圖文 俐落不對稱網格 (一大搭配小卡交錯) */
+    .asym-poster-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 1.25rem;
+      align-items: start;
+    }
+
+    .poster-main-card {
+      border: 1px solid var(--line);
+      background: var(--bg);
+      box-shadow: 0 4px 20px rgba(43, 39, 37, 0.04);
+      overflow: hidden;
+    }
+
+    .poster-tiles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.75rem;
+    }
+
+    .tile-card {
+      border: 1px solid var(--line);
+      background: var(--bg);
+      aspect-ratio: 1 / 1;
+      overflow: hidden;
+      box-shadow: 0 2px 10px rgba(43, 39, 37, 0.03);
+    }
+
+    .tile-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.35s var(--ease-spring);
+    }
+
+    .tile-card:hover img {
+      transform: scale(1.03);
+    }
+
+    /* 區塊三：工具單幅極簡平鋪展示 */
+    .tool-frame {
+      border: 1px solid var(--line);
+      background: var(--bg);
+      max-height: 500px;
+      overflow-y: auto;
+      box-shadow: 0 4px 20px rgba(43, 39, 37, 0.04);
+    }
+
+    /* 色票展示 */
+    .color-swatches {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.85rem;
+      margin-top: var(--space-md);
+    }
+
+    .swatch {
+      border: 1px solid var(--line);
+      padding: 0.85rem;
+      background: var(--bg);
+    }
+
+    .swatch-color {
+      height: 38px;
+      width: 100%;
+      border: 1px solid var(--line);
+      margin-bottom: 0.5rem;
+    }
+
+    .swatch-name {
+      font-family: var(--font-title);
+      font-size: 0.8rem;
+      color: var(--text);
+      letter-spacing: 1px;
+    }
+
+    .swatch-code {
+      font-size: 0.72rem;
+      color: var(--text-muted);
+      font-family: monospace;
+      margin-top: 0.15rem;
+    }
+
+    /* 人工智慧協作方框 */
+    .ai-statement-box {
+      border: 1px solid var(--line);
+      background: rgba(150, 113, 85, 0.035);
+      padding: 1.5rem 1.75rem;
+      margin: var(--space-lg) 0 0;
+    }
+
+    [data-theme="dark"] .ai-statement-box {
+      background: rgba(217, 155, 100, 0.04);
+    }
+
+    .ai-header {
+      font-family: var(--font-title);
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 2px;
+      margin-bottom: 0.4rem;
+      padding-bottom: 0.35rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .ai-statement-box p {
+      font-size: 0.88rem;
+      line-height: 2.1;
+      color: var(--text);
+      margin: 0;
+    }
+
+    /* 頁尾 */
+    .site-footer {
+      margin-top: var(--space-xxl);
+      padding-top: var(--space-md);
+      border-top: 1px solid var(--line);
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      letter-spacing: 1.5px;
+    }
+
+    /* 手機版適配 */
+    @media (max-width: 768px) {
+      .meta-table {
+        grid-template-columns: repeat(2, 1fr);
+        gap: var(--space-md);
+      }
+      .asym-web-grid {
+        grid-template-columns: 1fr;
+      }
+      .asym-poster-grid {
+        grid-template-columns: 1fr;
+      }
+      .color-swatches {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部導覽 -->
+  <header class="site-header">
+    <nav class="nav">
+      <span class="brand">郭佩綺 作品集</span>
+      <button id="theme-toggle" class="theme-toggle-btn" aria-label="切換主題">
+        <span class="theme-icon">☀️</span>
+      </button>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <!-- 首頁區塊 -->
+    <section class="hero">
+      <p class="eyebrow">專案作品</p>
+      <h1>陌生益所</h1>
+      <p class="hero-subtitle">品牌視覺與網站體驗優化</p>
+      
+      <!-- 簡短專案概述（兩句） -->
+      <p class="brief-text">
+        本專案為以課程與活動為主的電商品牌，獨立完成全套視覺企劃，並結合人工智慧大幅縮減網站上架作業時間。從零到一梳理視覺調性與瀏覽動線，傳遞安定、溫暖且具生活感的品牌形象。
+      </p>
+
+      <!-- 專案歷程說明（兩句） -->
+      <div class="career-note">
+        <div class="career-note-title">專案歷程與合作說明</div>
+        <p>
+          加入初期協助品牌建立視覺體系與自動化流程，完成階段性任務後因團隊營運方向調整協議結束合作。期待將這套視覺企劃與流程整合能力，投入體制更穩健的電商團隊。
+        </p>
+      </div>
+
+      <!-- 核心資訊欄 -->
+      <div class="meta-table">
+        <div class="meta-col">
+          <span class="label">負責角色</span>
+          <span class="value">平面視覺規劃、人工智慧協作</span>
+        </div>
+        <div class="meta-col">
+          <span class="label">目標客群</span>
+          <span class="value">25 至 45 歲女性客群</span>
+        </div>
+        <div class="meta-col">
+          <span class="label">核心任務</span>
+          <span class="value">視覺體系建立、上架流程優化</span>
+        </div>
+        <div class="meta-col">
+          <span class="label">專案範疇</span>
+          <span class="value">官方網站、線上課程、實體活動</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- 【區塊一：品牌網頁視覺】（合併原體驗優化與版面規範） -->
+    <section class="case-section">
+      <p class="section-label">核心展示</p>
+      <h2>品牌網頁視覺</h2>
+
+      <div class="point-block">
+        <div class="point-title">溫和療癒色調</div>
+        <p class="point-desc">
+          針對二十五至四十五歲主力女性客群，選用溫潤的米白與大地棕為基底。畫面不過度裝飾，傳遞安定、溫暖且具生活感的品牌形象。
+        </p>
+      </div>
+
+      <div class="point-block">
+        <div class="point-title">排版層級與留白</div>
+        <p class="point-desc">
+          嚴格規範字體大小與行距，讓圖文資訊保留舒適的呼吸空間，提升畫面整體的審美與閱讀體驗。
+        </p>
+      </div>
+
+      <!-- 平面極簡 Mockup：乾淨幾何背景底襯，不對稱排版 -->
+      <div class="flat-stage">
+        <div class="asym-web-grid">
+          <div class="flat-frame scroll-frame">
+            <img src="assets/陌生益所網頁.jpg" alt="陌生益所官方網站視覺首頁" />
+          </div>
+          <div class="flat-frame scroll-frame">
+            <img src="assets/課程上架.jpg" alt="課程商品選購頁面排版" />
+          </div>
+        </div>
+        <span class="caption">品牌官方網站首頁排版與課程商品頁實機呈現（平面極簡底襯）</span>
+      </div>
+
+      <!-- 色票展示 -->
+      <div class="color-swatches">
+        <div class="swatch">
+          <div class="swatch-color" style="background-color: #fdfbf4;"></div>
+          <div class="swatch-name">溫潤米白</div>
+          <div class="swatch-code">#fdfbf4 · 頁面基底</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background-color: #967155;"></div>
+          <div class="swatch-name">大地棕</div>
+          <div class="swatch-code">#967155 · 品牌主色</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background-color: #2b2725;"></div>
+          <div class="swatch-name">深沉黑</div>
+          <div class="swatch-code">#2b2725 · 文字層級</div>
+        </div>
+        <div class="swatch">
+          <div class="swatch-color" style="background-color: #E8C28E;"></div>
+          <div class="swatch-name">暖微金</div>
+          <div class="swatch-code">#E8C28E · 柔和按鈕</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 【區塊二：視覺企劃與活動設計】（俐落不對稱網格） -->
+    <section class="case-section">
+      <p class="section-label">行銷設計</p>
+      <h2>視覺企劃與活動設計</h2>
+
+      <div class="point-block">
+        <div class="point-title">活動宣傳圖文</div>
+        <p class="point-desc">
+          獨立完成各類活動的宣傳海報與社群圖文設計。
+        </p>
+      </div>
+
+      <div class="point-block">
+        <div class="point-title">跨平台視覺一致性</div>
+        <p class="point-desc">
+          制定每月各類活動的固定版面格式，確保官網與社群平台的視覺風格保持高度一致。
+        </p>
+      </div>
+
+      <!-- 俐落不對稱網格展示（刊物編輯節奏：主海報 + 多幅小圖交錯） -->
+      <div class="asym-poster-grid">
+        <div class="poster-main-card">
+          <img src="assets/課程活動.png" alt="跨平台各類活動統一收斂版面格式" />
+          <span class="caption" style="padding: 0 0.5rem 0.5rem;">跨平台固定版面格式規範總覽</span>
+        </div>
+
+        <div class="poster-tiles">
+          <div class="tile-card">
+            <img src="assets/美編圖0501.jpg" alt="活動海報 0501" />
+          </div>
+          <div class="tile-card">
+            <img src="assets/美編圖0502.jpg" alt="活動海報 0502" />
+          </div>
+          <div class="tile-card">
+            <img src="assets/美編圖0503.jpg" alt="活動海報 0503" />
+          </div>
+          <div class="tile-card">
+            <img src="assets/美編圖0605.jpg" alt="活動海報 0605" />
+          </div>
+          <div class="tile-card">
+            <img src="assets/美編圖0616.jpg" alt="活動海報 0616" />
+          </div>
+          <div class="tile-card">
+            <img src="assets/美編圖0618.jpg" alt="活動海報 0618" />
+          </div>
+        </div>
+      </div>
+      <span class="caption">每月各類活動海報與社群圖文的不對稱編排展示</span>
+    </section>
+
+    <!-- 【區塊三：上架流程與工具開發】 -->
+    <section class="case-section">
+      <p class="section-label">流程優化</p>
+      <h2>上架流程與工具開發</h2>
+
+      <div class="point-block">
+        <div class="point-title">自動化上架</div>
+        <p class="point-desc">
+          導入人工智慧處理同時處理各項活動文案，自動讀取關鍵資訊並轉換為符合電商平台上架規範的格式。
+        </p>
+      </div>
+
+      <div class="point-block">
+        <div class="point-title">提升作業效率</div>
+        <p class="point-desc">
+          原流程為個別將活動上架，開發文案工具後將繁雜作業流程簡化提升效率。
+        </p>
+      </div>
+
+      <!-- 工具介面極簡平面 Mockup -->
+      <div class="flat-stage">
+        <div class="tool-frame">
+          <img src="assets/開發上架文案工具.jpg" alt="開發上架文案工具實機介面" />
+        </div>
+        <span class="caption">文案結構化自動轉換工具實機介面</span>
+      </div>
+    </section>
+
+    <!-- 人工智慧協作說明 -->
+    <section class="case-section">
+      <div class="ai-statement-box">
+        <div class="ai-header">人工智慧協作說明</div>
+        <p>
+          主要負責視覺企劃、版面配置、色彩規範與使用者視覺動線。透過人工智慧協助將複雜文案轉化為規格化版面，並持續審閱微調排版細節，確保技術落地精準符合品牌設定的溫和調性。
+        </p>
+      </div>
+    </section>
+
+    <!-- 頁尾 -->
+    <footer class="site-footer">
+      <p>© 2026 郭佩綺 作品集。版權所有。</p>
+    </footer>
+
+  </main>
+
+  <script>
+    // 主題切換邏輯
+    const themeToggle = document.getElementById("theme-toggle");
+    const themeIcon = themeToggle.querySelector(".theme-icon");
+
+    const savedTheme = localStorage.getItem("peggy-portfolio-theme") ||
+      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+
+    const setTheme = (theme) => {
+      if (theme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+        if (themeIcon) themeIcon.textContent = "🌙";
+      } else {
+        document.documentElement.removeAttribute("data-theme");
+        if (themeIcon) themeIcon.textContent = "☀️";
+      }
+      localStorage.setItem("peggy-portfolio-theme", theme);
+    };
+
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener("click", () => {
+      const currentTheme = document.documentElement.getAttribute("data-theme");
+      setTheme(currentTheme === "dark" ? "light" : "dark");
+    });
+  </script>
+
+</body>
+</html>
