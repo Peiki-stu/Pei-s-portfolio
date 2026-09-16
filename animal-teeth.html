@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>咬牙切齒 Animal Teeth — 郭佩綺 作品集</title>
+  <meta name="description" content="咬牙切齒 Animal Teeth：深入研究 12 種動物的牙齒演化與生存功能，將生態數據整理為資訊圖表、插圖與立體書籍。">
+  
+  <!-- 字型 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;600&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- 開源 3D 翻頁書函式庫 -->
+  <script src="assets/page-flip.browser.js"></script>
+
+  <!-- 關鍵渲染路徑極速預載 (Critical Image Preload) -->
+  <link rel="preload" as="image" href="Capstone%20Project/book_pages/page_01.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="Capstone%20Project/book_pages/page_02.webp" fetchpriority="high">
+  <link rel="preload" as="image" href="Capstone%20Project/book_pages/page_03.webp">
+  <link rel="preload" as="image" href="Capstone%20Project/book_pages/page_04.webp">
+
+  <style>
+    :root {
+      --bg: #fdfbf4;
+      --text: #2b2725;
+      --text-muted: #6b635e;
+      --accent: #967155;
+      --line: rgba(150, 113, 85, 0.18);
+      --card-bg: rgba(150, 113, 85, 0.035);
+      --font-title: "Noto Serif TC", serif;
+      --font-body: "Noto Sans TC", sans-serif;
+      --max-width: 1040px; /* 大幅提升內容與圖像寬度，以圖為主 */
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+
+      /* 緊湊微調間距變數，縮短頁面總長度 */
+      --space-xs: 0.35rem;
+      --space-sm: 0.75rem;
+      --space-md: 1.25rem;
+      --space-lg: 1.8rem;
+      --space-xl: 2.4rem;
+      --space-xxl: 3.2rem;
+    }
+
+    [data-theme="dark"] {
+      --bg: #12100e;
+      --text: #f2ece4;
+      --text-muted: #a39990;
+      --accent: #d99b64;
+      --line: rgba(217, 155, 100, 0.2);
+      --card-bg: rgba(217, 155, 100, 0.04);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6; /* 緊湊好讀的行距 */
+      letter-spacing: 1.2px;
+      text-rendering: optimizeLegibility;
+      transition: background-color 0.3s var(--ease-smooth), color 0.3s var(--ease-smooth);
+      padding-bottom: var(--space-lg);
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    .container {
+      width: min(94%, var(--max-width));
+      margin: 0 auto;
+    }
+
+    /* 頂部導覽列 (Flexbox 兩側推開) */
+    .site-header {
+      position: sticky;
+      top: 0;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      background: rgba(253, 251, 244, 0.92);
+      border-bottom: 1px solid var(--line);
+      z-index: 50;
+      transition: background-color 0.3s var(--ease-smooth);
+    }
+
+    [data-theme="dark"] .site-header {
+      background: rgba(18, 16, 14, 0.92);
+    }
+
+    .navbar {
+      width: min(94%, var(--max-width));
+      margin: 0 auto;
+      padding: 16px 0;
+      display: flex;
+      justify-content: space-between; /* 關鍵：左側跟右側分別推向兩邊 */
+      align-items: center; /* 垂直置中對齊 */
+    }
+
+    .logo {
+      font-family: var(--font-title);
+      letter-spacing: 2px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      white-space: nowrap;
+      color: var(--text);
+      transition: color 0.2s ease;
+    }
+
+    .logo:hover {
+      color: var(--accent);
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 24px; /* 各個專案按鈕與 🌞 之間的間距 */
+    }
+
+    .nav-link {
+      font-size: 0.88rem;
+      color: var(--text-muted);
+      letter-spacing: 1.2px;
+      position: relative;
+      padding: 4px 0;
+      white-space: nowrap;
+      transition: color 0.2s ease;
+    }
+
+    .nav-link:hover {
+      color: var(--accent);
+    }
+
+    .nav-link.active {
+      color: var(--accent);
+      font-weight: 600;
+    }
+
+    .nav-link.active::after {
+      content: "";
+      position: absolute;
+      bottom: -3px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--accent);
+      border-radius: 1px;
+    }
+
+    .nav-link-other {
+      opacity: 0.7;
+    }
+
+    .nav-link-other:hover {
+      opacity: 1;
+      color: var(--accent);
+    }
+
+    /* 色彩切換按鈕：純圖示漂浮 Icon，無外框與灰底 */
+    .theme-btn {
+      background: transparent;
+      border: none;
+      font-size: 20px;
+      cursor: pointer;
+      padding: 2px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      transition: transform 0.25s var(--ease-spring), opacity 0.2s ease;
+    }
+
+    .theme-btn:hover {
+      transform: scale(1.2) rotate(15deg);
+      opacity: 0.85;
+    }
+
+    /* 二、 精簡文案（文字為輔，極簡純粹） */
+    .hero {
+      padding: var(--space-xl) 0 var(--space-md);
+    }
+
+    .eyebrow {
+      color: var(--accent);
+      letter-spacing: 3.5px;
+      font-size: 0.78rem;
+      margin-bottom: 0.35rem;
+      font-weight: 500;
+    }
+
+    h1 {
+      font-family: var(--font-title);
+      font-size: clamp(2.1rem, 5.2vw, 3rem);
+      font-weight: 600;
+      line-height: 1.3;
+      letter-spacing: 2.5px;
+      margin-bottom: 0.4rem;
+    }
+
+    .hero-subtitle {
+      font-family: var(--font-title);
+      font-size: clamp(1.05rem, 2.8vw, 1.3rem);
+      color: var(--accent);
+      letter-spacing: 2px;
+      margin-bottom: var(--space-sm);
+      font-weight: 400;
+    }
+
+    .brief-text {
+      max-width: 860px;
+      font-size: 0.96rem;
+      color: var(--text);
+      line-height: 2;
+      margin-bottom: var(--space-md);
+    }
+
+    /* 核心資訊列（極簡橫向標籤） */
+    .meta-pills {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      margin-bottom: var(--space-lg);
+      padding-bottom: var(--space-md);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .meta-pill {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      padding: 0.3rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    .meta-pill strong {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    /* 二、 核心視覺層級：3D 電子書（以圖為主、大尺寸、自動/暫停翻頁） */
+    .flipbook-feature-section {
+      padding-bottom: var(--space-xl);
+    }
+
+    .flipbook-card {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: clamp(1rem, 2.5vw, 1.8rem);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.03);
+      position: relative;
+    }
+
+    .flipbook-header {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.8rem;
+      margin-bottom: 1rem;
+      padding-bottom: 0.8rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .flipbook-title-wrap h2 {
+      font-family: var(--font-title);
+      font-size: 1.25rem;
+      letter-spacing: 2px;
+      color: var(--text);
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+    }
+
+    .flipbook-tip {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+    }
+
+    /* 翻頁展示舞台 */
+    .flipbook-viewport {
+      width: 100%;
+      min-height: 520px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: 12px;
+      padding: 1.8rem 0.5rem;
+      overflow: hidden;
+    }
+
+    [data-theme="dark"] .flipbook-viewport {
+      background: rgba(255, 255, 255, 0.015);
+    }
+
+    #flipbook-container {
+      margin: 0 auto;
+      box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16);
+      border-radius: 4px;
+      transition: transform 0.3s var(--ease-smooth);
+    }
+
+    /* 載入中動畫 */
+    .flipbook-loading {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      background: var(--bg);
+      z-index: 10;
+      transition: opacity 0.4s ease;
+    }
+
+    .flipbook-loading.hidden {
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--line);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    /* 控制工具列（洗練化：上一頁、播放/暫停、下一頁、頁碼、跳頁、全螢幕） */
+    .flipbook-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      margin-top: 1.4rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .flip-btn {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: 0.45rem 1rem;
+      font-size: 0.84rem;
+      border-radius: 8px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      letter-spacing: 1px;
+      transition: transform 0.15s var(--ease-spring), border-color 0.2s ease, background-color 0.2s ease, color 0.2s ease;
+    }
+
+    .flip-btn:hover:not(:disabled) {
+      transform: scale(1.04) translateY(-1px);
+      border-color: var(--accent);
+      color: var(--accent);
+      background: rgba(150, 113, 85, 0.06);
+    }
+
+    .flip-btn:active:not(:disabled) {
+      transform: scale(0.97) translateY(0);
+    }
+
+    .flip-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    /* 自動播放切換鈕高亮 */
+    .flip-btn.active-play {
+      border-color: var(--accent);
+      color: #fff;
+      background: var(--accent);
+    }
+
+    .page-indicator {
+      font-size: 0.86rem;
+      letter-spacing: 1.5px;
+      color: var(--text);
+      min-width: 140px;
+      text-align: center;
+      font-weight: 500;
+    }
+
+    .jump-input {
+      width: 52px;
+      padding: 0.35rem;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      background: var(--bg);
+      color: var(--text);
+      text-align: center;
+      font-size: 0.82rem;
+    }
+
+    .jump-input:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    /* 三、 專案內容區塊佈局（等高 Flexbox、無 hover 放大） */
+    .project-media-section {
+      padding: var(--space-xl) 0;
+      border-top: 1px solid var(--line);
+    }
+
+    .section-title-wrap {
+      margin-bottom: var(--space-md);
+    }
+
+    .section-label {
+      font-size: 0.76rem;
+      color: var(--accent);
+      letter-spacing: 3px;
+      margin-bottom: 0.25rem;
+    }
+
+    h2.section-heading {
+      font-family: var(--font-title);
+      font-size: clamp(1.4rem, 3.6vw, 1.8rem);
+      font-weight: 500;
+      letter-spacing: 2px;
+      line-height: 1.4;
+    }
+
+    /* 設定父容器為 Flexbox，讓內部元素自動等高 */
+    .media-container {
+      display: flex;
+      gap: 24px; /* 照片與影片之間的間距 */
+      align-items: stretch; /* 讓兩者高度強制拉伸到一致 */
+      margin-top: 1.5rem;
+    }
+
+    /* 設定照片與影片的比例與填滿方式，移除放大效果 */
+    .media-container img,
+    .media-container video {
+      flex: 1; /* 讓兩者各佔 50% 寬度 */
+      width: 100%;
+      height: 400px; /* 設定固定的理想高度 */
+      object-fit: cover; /* 確保畫面填滿且不變形 */
+      border-radius: 12px; /* 讓邊角一致，視覺更協調 */
+      background: #000;
+      transform: none !important; /* 移除滑鼠靠近放大效果 */
+      transition: none !important;
+    }
+
+    .media-container img:hover,
+    .media-container video:hover {
+      transform: none !important;
+    }
+
+    @media (max-width: 768px) {
+      .media-container {
+        flex-direction: column;
+      }
+      .media-container img,
+      .media-container video {
+        height: 320px;
+      }
+    }
+
+    /* 設計執行內容（統一 12px 圓角） */
+    .execution-block {
+      margin-top: var(--space-sm);
+      margin-bottom: var(--space-sm);
+      padding: 1.1rem 1.4rem;
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      max-width: 840px;
+    }
+
+    .execution-title {
+      font-family: var(--font-title);
+      font-size: 0.92rem;
+      letter-spacing: 2px;
+      color: var(--accent);
+      margin-bottom: 0.45rem;
+      font-weight: 500;
+    }
+
+    .execution-list {
+      list-style: none;
+    }
+
+    .execution-list li {
+      position: relative;
+      padding-left: 1.3rem;
+      margin-bottom: 0.35rem;
+      font-size: 0.88rem;
+      color: var(--text);
+      line-height: 1.6;
+    }
+
+    .execution-list li:last-child {
+      margin-bottom: 0;
+    }
+
+    .execution-list li::before {
+      content: "•";
+      position: absolute;
+      left: 0.2rem;
+      color: var(--accent);
+      font-size: 1.1rem;
+      line-height: 1.6;
+    }
+
+    /* 頁尾低調純文字排版（無外框卡片、低調灰階、自然融入） */
+    .site-footer {
+      margin-top: var(--space-xl);
+      padding: var(--space-md) 0 var(--space-lg);
+      border-top: 1px solid var(--line);
+      text-align: center;
+    }
+
+    .footer-contact {
+      font-size: 14px;
+      color: #777;
+      letter-spacing: 1px;
+      margin-bottom: 0.35rem;
+    }
+
+    [data-theme="dark"] .footer-contact {
+      color: #999;
+    }
+
+    .footer-contact a {
+      color: inherit;
+      text-decoration: none;
+      transition: color 0.2s ease;
+    }
+
+    .footer-contact a:hover {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+
+    .copyright-text {
+      text-align: center;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      color: #888;
+      opacity: 0.85;
+      margin: 0;
+    }
+
+    [data-theme="dark"] .copyright-text {
+      color: #777;
+    }
+
+    @media (max-width: 768px) {
+      .navbar {
+        padding: 12px 0;
+      }
+      .logo {
+        font-size: 0.95rem;
+        letter-spacing: 1px;
+      }
+      .nav-right {
+        gap: 14px;
+      }
+      .nav-link {
+        font-size: 0.82rem;
+        letter-spacing: 0.5px;
+      }
+      .theme-btn {
+        font-size: 18px;
+      }
+      .flipbook-viewport {
+        min-height: 360px;
+        padding: 1rem 0.25rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部導覽列 (Flexbox 兩側對齊) -->
+  <header class="site-header">
+    <nav class="navbar">
+      <!-- 左側 -->
+      <a href="index.html" class="logo">郭佩綺 · 作品集</a>
+
+      <!-- 右側 -->
+      <div class="nav-right">
+        <a href="stranger.html" class="nav-link">陌生益所</a>
+        <a href="animal-teeth.html" class="nav-link active">咬牙切齒</a>
+        <a href="graphic-design.html" class="nav-link">平面設計</a>
+        <!-- 色彩切換按鈕 -->
+        <button id="theme-toggle" class="theme-btn" aria-label="切換色彩模式" title="切換色彩模式">
+          <span class="theme-icon">☀️</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+
+    <!-- 二、 精簡文案（文字僅作為輔助說明，保持畫面極簡） -->
+    <section class="hero">
+      <p class="eyebrow">畢業製作／資訊圖表設計、書籍排版</p>
+      <h1>咬牙切齒 Animal Teeth</h1>
+      <p class="hero-subtitle">動物牙齒演化與生存功能之資訊圖表與立體書籍設計</p>
+
+      <div class="brief-text">
+        深入研究 12 種動物的牙齒演化與生存功能，將生態數據整理為資訊圖表、插圖與立體書籍，並延伸設計周邊飾品與海報，降低大眾理解生態知識的門檻。
+      </div>
+
+      <!-- 核心資訊列 -->
+      <div class="meta-pills">
+        <span class="meta-pill"><strong>負責項目</strong> 畢業製作／資訊圖表設計、書籍排版</span>
+        <span class="meta-pill"><strong>使用工具</strong> Illustrator、Photoshop、InDesign、Procreate</span>
+        <span class="meta-pill"><strong>書籍規格</strong> 57 頁橫式實體繪本</span>
+      </div>
+
+      <!-- 設計執行重點（上移至專案介紹正下方，統一 12px 圓角） -->
+      <div class="execution-block">
+        <div class="execution-title">設計執行重點</div>
+        <ul class="execution-list">
+          <li><strong>數據資訊化</strong>：整理 12 種動物的頭骨構造與生態資料，設計成易讀的資訊圖表。</li>
+          <li><strong>插畫與影像處理</strong>：為每種動物繪製 3 款功能插圖，並使用 Photoshop 完成頭骨影像後製。</li>
+          <li><strong>書籍設計</strong>：規劃書籍版面排版，印刷品輸出完稿。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 二、 核心視覺層級：3D 電子書（大幅提升圖像佔比・以圖為主・自動/暫停翻頁） -->
+    <section class="flipbook-feature-section" id="book-section">
+      <div class="flipbook-card" id="flipbook-viewport-card">
+        <div class="flipbook-header">
+          <div class="flipbook-title-wrap">
+            <h2>《咬牙切齒》線上翻頁電子書</h2>
+            <span class="flipbook-tip">💡 支援拖曳頁角翻閱、點擊按鈕、鍵盤左右箭頭（← / →）或開啟全螢幕</span>
+          </div>
+        </div>
+
+        <div class="flipbook-viewport" id="viewport">
+          <div class="flipbook-loading" id="book-loading">
+            <div class="spinner"></div>
+            <p style="font-size: 0.86rem; color: var(--text-muted); letter-spacing: 1.5px;">電子書載入中...</p>
+          </div>
+
+          <div id="flipbook-container"></div>
+        </div>
+
+        <!-- 閱讀器控制工具列（已刪除：封面/封底/PDF下載按鈕，新增：自動翻頁切換） -->
+        <div class="flipbook-toolbar">
+          <button class="flip-btn" id="btn-prev" title="上一頁">◀ 上一頁</button>
+
+          <!-- 自動翻頁 / 暫停翻頁切換按鈕 -->
+          <button class="flip-btn" id="btn-auto" title="自動輪播翻頁">
+            <span>▶ 自動翻頁</span>
+          </button>
+          
+          <div class="page-indicator">
+            <span id="page-display">載入中...</span>
+          </div>
+
+          <button class="flip-btn" id="btn-next" title="下一頁">下一頁 ▶</button>
+
+          <div style="display: flex; align-items: center; gap: 0.4rem; margin-left: 0.5rem;">
+            <label for="jump-page" style="font-size: 0.78rem; color: var(--text-muted);">跳至：</label>
+            <input type="number" id="jump-page" class="jump-input" min="1" max="57" value="1" />
+            <button class="flip-btn" id="btn-jump" style="padding: 0.35rem 0.65rem;">前往</button>
+          </div>
+
+          <button class="flip-btn" id="btn-fullscreen" style="margin-left: auto;">
+            ⛶ 全螢幕閱讀
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 三、 專案內容區塊佈局（等高容器：照片與直式影片） -->
+    <section class="project-media-section">
+      <div class="section-title-wrap">
+        <p class="section-label">實體呈現</p>
+        <h2 class="section-heading">專題展示紀錄</h2>
+      </div>
+
+      <div class="media-container">
+        <img 
+          src="Capstone%20Project/web_assets/exhibition_display.webp" 
+          alt="實景拼貼"
+          loading="lazy" 
+        />
+        <video 
+          controls 
+          playsinline 
+          preload="none" 
+          poster="Capstone%20Project/web_assets/intro2.webp"
+        >
+          <source src="Capstone%20Project/web_assets/exhibition1.mp4" type="video/mp4">
+          <source src="Capstone%20Project/exhibition1.MOV" type="video/quicktime">
+          您的瀏覽器不支援播放此影片格式。
+        </video>
+      </div>
+
+    </section>
+
+    <!-- 四、 頁尾聯絡資訊與版權宣告 -->
+    <footer class="site-footer">
+      <p class="footer-contact">聯絡方式 <a href="mailto:spad9111@gmail.com">spad9111@gmail.com</a></p>
+      <p class="copyright-text">© 2026 郭佩綺 作品集。版權所有。</p>
+    </footer>
+
+  </main>
+
+  <script>
+    // 1. 色彩主題切換邏輯
+    const themeToggle = document.getElementById("theme-toggle");
+    const themeIcon = themeToggle.querySelector(".theme-icon");
+
+    const savedTheme = localStorage.getItem("peggy-portfolio-theme") ||
+      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+
+    const setTheme = (theme) => {
+      if (theme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+        if (themeIcon) themeIcon.textContent = "🌙";
+      } else {
+        document.documentElement.removeAttribute("data-theme");
+        if (themeIcon) themeIcon.textContent = "☀️";
+      }
+      localStorage.setItem("peggy-portfolio-theme", theme);
+    };
+
+    setTheme(savedTheme);
+
+    themeToggle.addEventListener("click", () => {
+      const currentTheme = document.documentElement.getAttribute("data-theme");
+      setTheme(currentTheme === "dark" ? "light" : "dark");
+    });
+
+    // 2. 3D 翻頁電子書初始化
+    document.addEventListener("DOMContentLoaded", function () {
+      const container = document.getElementById("flipbook-container");
+      const loadingEl = document.getElementById("book-loading");
+      const pageDisplay = document.getElementById("page-display");
+      const jumpInput = document.getElementById("jump-page");
+      const btnPrev = document.getElementById("btn-prev");
+      const btnNext = document.getElementById("btn-next");
+      const btnJump = document.getElementById("btn-jump");
+      const btnAuto = document.getElementById("btn-auto");
+      const btnFullscreen = document.getElementById("btn-fullscreen");
+      const cardViewport = document.getElementById("flipbook-viewport-card");
+
+      const totalPages = 57;
+      const pages = [];
+      for (let i = 1; i <= totalPages; i++) {
+        const pad = String(i).padStart(2, "0");
+        pages.push(`Capstone%20Project/book_pages/page_${pad}.webp`);
+      }
+
+      // 橫向比例 595 : 420
+      const bookWidth = 595;
+      const bookHeight = 420;
+
+      const pageFlip = new St.PageFlip(container, {
+        width: bookWidth,
+        height: bookHeight,
+        size: "stretch",
+        minWidth: 280,
+        maxWidth: 1040,
+        minHeight: 198,
+        maxHeight: 734,
+        maxShadowOpacity: 0.35,
+        showCover: true,
+        mobileScrollSupport: false,
+        usePortrait: true,
+        startPage: 0,
+        flippingTime: 380, // 極速 0.38 秒翻頁
+        swipeDistance: 20
+      });
+
+      pageFlip.loadFromImages(pages);
+
+      // 背景靜默預載後續頁面
+      const preloadNextPages = () => {
+        let pIndex = 4;
+        const loadBatch = () => {
+          for (let i = 0; i < 4 && pIndex < totalPages; i++, pIndex++) {
+            const img = new Image();
+            img.src = pages[pIndex];
+          }
+          if (pIndex < totalPages) {
+            setTimeout(loadBatch, 60);
+          }
+        };
+        if ('requestIdleCallback' in window) {
+          requestIdleCallback(loadBatch);
+        } else {
+          setTimeout(loadBatch, 150);
+        }
+      };
+
+      function updateUI(pageIndex) {
+        const total = totalPages;
+        const current = pageIndex + 1;
+        jumpInput.value = current;
+
+        const orientation = pageFlip.getOrientation ? pageFlip.getOrientation() : "landscape";
+        if (orientation === "portrait" || current === 1 || current === total) {
+          if (current === 1) {
+            pageDisplay.textContent = `封面 · 第 1 頁 / 共 ${total} 頁`;
+          } else if (current === total) {
+            pageDisplay.textContent = `封底 · 第 ${total} 頁 / 共 ${total} 頁`;
+          } else {
+            pageDisplay.textContent = `第 ${current} 頁 / 共 ${total} 頁`;
+          }
+        } else {
+          const nextP = Math.min(current + 1, total);
+          pageDisplay.textContent = `第 ${current}-${nextP} 頁 / 共 ${total} 頁`;
+        }
+
+        btnPrev.disabled = pageIndex <= 0;
+        btnNext.disabled = pageIndex >= total - 1;
+      }
+
+      pageFlip.on("init", function () {
+        loadingEl.classList.add("hidden");
+        updateUI(pageFlip.getCurrentPageIndex());
+        preloadNextPages();
+      });
+
+      pageFlip.on("flip", function (e) {
+        updateUI(e.data);
+      });
+
+      pageFlip.on("changeOrientation", function () {
+        updateUI(pageFlip.getCurrentPageIndex());
+      });
+
+      btnPrev.addEventListener("click", () => {
+        stopAutoFlip();
+        pageFlip.flipPrev();
+      });
+      
+      btnNext.addEventListener("click", () => {
+        stopAutoFlip();
+        pageFlip.flipNext();
+      });
+
+      btnJump.addEventListener("click", () => {
+        stopAutoFlip();
+        let p = parseInt(jumpInput.value, 10);
+        if (!isNaN(p)) {
+          p = Math.max(1, Math.min(totalPages, p));
+          pageFlip.turnToPage(p - 1);
+        }
+      });
+
+      jumpInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter") {
+          btnJump.click();
+        }
+      });
+
+      // 自動翻頁 / 暫停機制
+      let autoFlipTimer = null;
+      function startAutoFlip() {
+        btnAuto.innerHTML = "<span>⏸ 暫停翻頁</span>";
+        btnAuto.classList.add("active-play");
+        autoFlipTimer = setInterval(() => {
+          const current = pageFlip.getCurrentPageIndex();
+          if (current >= totalPages - 1) {
+            stopAutoFlip();
+          } else {
+            pageFlip.flipNext();
+          }
+        }, 3600);
+      }
+
+      function stopAutoFlip() {
+        if (autoFlipTimer) {
+          clearInterval(autoFlipTimer);
+          autoFlipTimer = null;
+        }
+        btnAuto.innerHTML = "<span>▶ 自動翻頁</span>";
+        btnAuto.classList.remove("active-play");
+      }
+
+      btnAuto.addEventListener("click", () => {
+        if (autoFlipTimer) {
+          stopAutoFlip();
+        } else {
+          startAutoFlip();
+        }
+      });
+
+      // 鍵盤左右箭頭導航
+      window.addEventListener("keydown", (e) => {
+        if (document.activeElement === jumpInput) return;
+        if (e.key === "ArrowLeft") {
+          stopAutoFlip();
+          pageFlip.flipPrev();
+        } else if (e.key === "ArrowRight") {
+          stopAutoFlip();
+          pageFlip.flipNext();
+        }
+      });
+
+      // 全螢幕切換
+      btnFullscreen.addEventListener("click", () => {
+        if (!document.fullscreenElement) {
+          cardViewport.requestFullscreen().catch(err => {
+            console.error("無法切換全螢幕:", err);
+          });
+        } else {
+          document.exitFullscreen();
+        }
+      });
+
+      document.addEventListener("fullscreenchange", () => {
+        if (document.fullscreenElement) {
+          btnFullscreen.textContent = "✕ 離開全螢幕";
+        } else {
+          btnFullscreen.textContent = "⛶ 全螢幕閱讀";
+        }
+      });
+    });
+  </script>
+
+  <!-- 視覺調校與文字直改開關 (A 方案 HUD) -->
+  <script src="assets/live-editor.js"></script>
+</body>
+</html>
