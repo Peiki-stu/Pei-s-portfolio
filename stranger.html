@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -26,6 +26,7 @@
       --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
 
       /* 緊湊微調間距變數，縮短頁面總長度 */
+      --line-height-body: 1.55;
       --space-xs: 0.35rem;
       --space-sm: 0.5625rem;
       --space-md: 0.9375rem;
@@ -57,7 +58,7 @@
       font-family: var(--font-body);
       background-color: var(--bg);
       color: var(--text);
-      line-height: 1.35; /* 緊湊好讀的行距 */
+      line-height: var(--line-height-body, 1.55);
       letter-spacing: 1.2px;
       text-rendering: optimizeLegibility;
       transition: background-color 0.3s var(--ease-smooth), color 0.3s var(--ease-smooth);
@@ -280,11 +281,11 @@
       letter-spacing: 0.3px;
     }
 
-    /* 平面極簡 Mockup 背景底襯（統一 12px 圓角） */
+    /* 平面極簡 Mockup 背景底襯（統一 8px 圓角） */
     .flat-stage {
       background: var(--card-bg);
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 8px;
       padding: 1.25rem;
       margin: var(--space-sm) 0;
     }
@@ -318,7 +319,7 @@
       margin-top: 0.35rem;
     }
 
-    /* 區塊二：活動宣傳圖文 俐落不對稱網格（統一 12px 圓角） */
+    /* 區塊二：活動宣傳圖文 俐落不對稱網格（統一 8px 圓角） */
     .asym-poster-grid {
       display: grid;
       grid-template-columns: 1.2fr 1fr;
@@ -328,7 +329,7 @@
 
     .poster-main-card {
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 8px;
       background: var(--bg);
       overflow: hidden;
     }
@@ -358,7 +359,7 @@
       transform: scale(1.03);
     }
 
-    /* 區塊三：工具介面展示（統一 12px 圓角） */
+    /* 區塊三：工具介面展示（統一 8px 圓角） */
     .tool-frame {
       border: 1px solid var(--line);
       border-radius: 8px;
@@ -380,7 +381,7 @@
     .swatch {
       border: 1px solid var(--line);
       background: var(--card-bg);
-      border-radius: 10px;
+      border-radius: 8px;
       padding: 0.75rem;
       text-align: center;
     }
@@ -499,7 +500,7 @@
         <a href="graphic-design.html" class="nav-link">平面設計</a>
         <!-- 色彩切換按鈕 -->
         <button id="theme-toggle" class="theme-btn" aria-label="切換色彩模式" title="切換色彩模式">
-          <span class="theme-icon">☀️</span>
+          <span class="theme-icon">🌙</span>
         </button>
       </div>
     </nav>
@@ -534,8 +535,8 @@
     <!-- 【區塊一：品牌網頁設計】 -->
     <section class="case-section">
       <p class="section-label">網頁展示</p>
-      <h2>品牌網頁設計</h2>
-      <p class="section-desc">透過 AI 輔助撰寫<strong>網頁語法</strong>並整合至電商後台，客製品牌視覺與互動效果；色彩選用柔和大地色系，定調溫和的品牌氛圍。</p>
+      <h2>品牌網頁設計 <span style="font-size: 0.85rem; font-weight: normal; color: var(--text-muted); margin-left: 0.5rem;">（可滑動查看）</span></h2>
+      <p class="section-desc">運用 AI 輔助<strong>設計網頁</strong>並整合至電商後台，客群以女性為主根據需求與美感喜好，整體視覺選用柔和大地色系呈現。</p>
 
       <!-- 平面極簡 Mockup：乾淨幾何背景底襯，不對稱排版 -->
       <div class="flat-stage">
@@ -609,14 +610,13 @@
     <section class="case-section">
       <p class="section-label">流程優化</p>
       <h2>活動上架工具開發</h2>
-      <p class="section-desc">開發文案轉換工具取代逐筆建檔，自動擷取關鍵資訊，以利提升平台上架效率。</p>
+      <p class="section-desc">開發出<strong>文案轉換工具</strong>取代逐筆建檔，自動擷取文案資訊，以利提升台上架效率。</p>
 
       <!-- 工具介面極簡平面 Mockup -->
       <div class="flat-stage">
         <div class="tool-frame">
           <img src="assets/tool-mockup.jpg" alt="開發上架文案工具實機介面" />
         </div>
-        <span class="caption">文案轉換工具系統</span>
       </div>
     </section>
 
@@ -629,12 +629,11 @@
   </main>
 
   <script>
-    // 主題切換邏輯
+    // 主題切換邏輯（預設深色模式）
     const themeToggle = document.getElementById("theme-toggle");
-    const themeIcon = themeToggle.querySelector(".theme-icon");
+    const themeIcon = themeToggle ? themeToggle.querySelector(".theme-icon") : null;
 
-    const savedTheme = localStorage.getItem("peggy-portfolio-theme") ||
-      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const savedTheme = localStorage.getItem("peggy-portfolio-theme-v2") || "dark";
 
     const setTheme = (theme) => {
       if (theme === "dark") {
@@ -644,18 +643,25 @@
         document.documentElement.removeAttribute("data-theme");
         if (themeIcon) themeIcon.textContent = "☀️";
       }
-      localStorage.setItem("peggy-portfolio-theme", theme);
     };
 
     setTheme(savedTheme);
 
-    themeToggle.addEventListener("click", () => {
-      const currentTheme = document.documentElement.getAttribute("data-theme");
-      setTheme(currentTheme === "dark" ? "light" : "dark");
+    if (themeToggle) {
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = document.documentElement.getAttribute("data-theme");
+        const nextTheme = currentTheme === "dark" ? "light" : "dark";
+        setTheme(nextTheme);
+        localStorage.setItem("peggy-portfolio-theme-v2", nextTheme);
+      });
+    }
+
+    // 清除舊版視覺編輯器快取，確保完全載入最新程式碼
+    ['portfolio_draft_', 'portfolio_settings_'].forEach(prefix => {
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith(prefix)) localStorage.removeItem(key);
+      });
     });
   </script>
-
-  <!-- 視覺調校與文字直改開關 (A 方案 HUD) -->
-  <script src="assets/live-editor.js"></script>
 </body>
 </html>

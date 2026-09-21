@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,6 +35,7 @@
       --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
 
       /* 緊湊微調間距變數，縮短頁面總長度 */
+      --line-height-body: 1.55;
       --space-xs: 0.35rem;
       --space-sm: 0.5625rem;
       --space-md: 0.9375rem;
@@ -66,7 +67,7 @@
       font-family: var(--font-body);
       background-color: var(--bg);
       color: var(--text);
-      line-height: 1.35; /* 緊湊好讀的行距 */
+      line-height: var(--line-height-body, 1.55);
       letter-spacing: 1.2px;
       text-rendering: optimizeLegibility;
       transition: background-color 0.3s var(--ease-smooth), color 0.3s var(--ease-smooth);
@@ -235,9 +236,7 @@
       display: flex;
       flex-wrap: wrap;
       gap: 0.8rem;
-      margin-bottom: var(--space-lg);
-      padding-bottom: var(--space-md);
-      border-bottom: 1px solid var(--line);
+      margin-bottom: var(--space-sm);
     }
 
     .meta-pill {
@@ -263,8 +262,8 @@
     .flipbook-card {
       background: var(--card-bg);
       border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: clamp(1rem, 2.5vw, 1.8rem);
+      border-radius: 8px;
+      padding: clamp(0.75rem, 1.8vw, 1.25rem);
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.03);
       position: relative;
     }
@@ -275,8 +274,8 @@
       justify-content: space-between;
       align-items: center;
       gap: 0.8rem;
-      margin-bottom: 1rem;
-      padding-bottom: 0.8rem;
+      margin-bottom: 0.75rem;
+      padding-bottom: 0.6rem;
       border-bottom: 1px solid var(--line);
     }
 
@@ -295,17 +294,17 @@
       letter-spacing: 1px;
     }
 
-    /* 翻頁展示舞台 */
+    /* 翻頁展示舞台：緊貼電子書橫向比例 (1190:420)，消除多餘上下留白 */
     .flipbook-viewport {
       width: 100%;
-      min-height: 520px;
+      min-height: clamp(220px, 32vw, 380px);
       display: flex;
       justify-content: center;
       align-items: center;
       position: relative;
       background: rgba(0, 0, 0, 0.02);
-      border-radius: 12px;
-      padding: 1.8rem 0.5rem;
+      border-radius: 8px;
+      padding: 0.6rem 0.4rem;
       overflow: hidden;
     }
 
@@ -315,6 +314,8 @@
 
     #flipbook-container {
       margin: 0 auto;
+      width: 100%;
+      max-width: 980px;
       box-shadow: 0 16px 48px rgba(0, 0, 0, 0.16);
       border-radius: 4px;
       transition: transform 0.3s var(--ease-smooth);
@@ -453,6 +454,15 @@
       line-height: 1.4;
     }
 
+    .section-desc {
+      font-size: 0.92rem;
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-top: 0.4rem;
+      max-width: 800px;
+      letter-spacing: 0.5px;
+    }
+
     /* 設定父容器為 Flexbox，讓內部元素自動等高 */
     .media-container {
       display: flex;
@@ -468,7 +478,7 @@
       width: 100%;
       height: 400px; /* 設定固定的理想高度 */
       object-fit: cover; /* 確保畫面填滿且不變形 */
-      border-radius: 12px; /* 讓邊角一致，視覺更協調 */
+      border-radius: 8px; /* 讓邊角一致，視覺更協調 */
       background: #000;
       transform: none !important; /* 移除滑鼠靠近放大效果 */
       transition: none !important;
@@ -489,14 +499,131 @@
       }
     }
 
-    /* 設計執行內容（統一 12px 圓角） */
+    /* =========================================================
+       專題紀錄區：Logo 稿與製作紀錄 (縮小草稿展示)
+       嚴格遵守：縮小比例、無效果、無放大
+       ========================================================= */
+    .project-drafts-archive {
+      margin-top: 2.8rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .drafts-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      flex-wrap: wrap;
+      gap: 1rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .draft-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 600;
+      letter-spacing: 1.5px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 0.3rem;
+    }
+
+    .drafts-title {
+      font-family: var(--font-title);
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: 1.5px;
+    }
+
+    .drafts-subtitle {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+      letter-spacing: 0.5px;
+    }
+
+
+    /* 縮小比例網格：5 欄等比縮小 */
+    .drafts-grid {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 14px;
+      margin-top: 1rem;
+    }
+
+    @media (max-width: 1000px) {
+      .drafts-grid {
+        grid-template-columns: repeat(3, 1fr);
+        gap: 12px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .drafts-grid {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+      }
+    }
+
+    /* 縮小草稿卡片：嚴格無效果、無放大、游標預設 */
+    .capstone-draft-card {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      cursor: default !important;
+      transform: none !important;
+      box-shadow: none !important;
+      transition: none !important;
+    }
+
+    .capstone-draft-card:hover {
+      transform: none !important;
+      box-shadow: none !important;
+      border-color: var(--line) !important;
+    }
+
+    .draft-img-container {
+      width: 100%;
+      height: 125px;
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 4px;
+    }
+
+    [data-theme="dark"] .draft-img-container {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .draft-img-container img {
+      max-width: 100%;
+      max-height: 100%;
+      object-fit: contain;
+      pointer-events: none !important;
+      transform: none !important;
+      filter: none !important;
+      transition: none !important;
+      user-select: none;
+      -webkit-user-drag: none;
+    }
+
+
+
+    /* 設計執行內容（統一 8px 圓角） */
     .execution-block {
       margin-top: var(--space-sm);
       margin-bottom: var(--space-sm);
-      padding: 1.1rem 1.4rem;
+      padding: 1rem 1.3rem;
       background: var(--card-bg);
       border: 1px solid var(--line);
-      border-radius: 12px;
+      border-radius: 8px;
       max-width: 840px;
     }
 
@@ -505,34 +632,15 @@
       font-size: 0.92rem;
       letter-spacing: 2px;
       color: var(--accent);
-      margin-bottom: 0.45rem;
+      margin-bottom: 0.35rem;
       font-weight: 500;
     }
 
-    .execution-list {
-      list-style: none;
-    }
-
-    .execution-list li {
-      position: relative;
-      padding-left: 1.3rem;
-      margin-bottom: 0.35rem;
-      font-size: 0.88rem;
+    .execution-desc {
+      font-size: 0.9rem;
       color: var(--text);
       line-height: 1.6;
-    }
-
-    .execution-list li:last-child {
-      margin-bottom: 0;
-    }
-
-    .execution-list li::before {
-      content: "•";
-      position: absolute;
-      left: 0.2rem;
-      color: var(--accent);
-      font-size: 1.1rem;
-      line-height: 1.6;
+      letter-spacing: 0.5px;
     }
 
     /* 頁尾低調純文字排版（無外框卡片、低調灰階、自然融入） */
@@ -597,8 +705,8 @@
         font-size: 18px;
       }
       .flipbook-viewport {
-        min-height: 360px;
-        padding: 1rem 0.25rem;
+        min-height: 200px;
+        padding: 0.4rem 0.2rem;
       }
     }
   </style>
@@ -618,7 +726,7 @@
         <a href="graphic-design.html" class="nav-link">平面設計</a>
         <!-- 色彩切換按鈕 -->
         <button id="theme-toggle" class="theme-btn" aria-label="切換色彩模式" title="切換色彩模式">
-          <span class="theme-icon">☀️</span>
+          <span class="theme-icon">🌙</span>
         </button>
       </div>
     </nav>
@@ -638,19 +746,13 @@
 
       <!-- 核心資訊列 -->
       <div class="meta-pills">
-        <span class="meta-pill"><strong>負責項目</strong> 資訊圖表設計、書籍版面編排</span>
         <span class="meta-pill"><strong>使用工具</strong> Illustrator、Photoshop、InDesign、Procreate</span>
-        <span class="meta-pill"><strong>裝幀產出</strong> 全冊 57 頁橫式實體繪本</span>
       </div>
 
-      <!-- 設計執行重點（上移至專案介紹正下方，統一 8px 圓角） -->
+      <!-- 負責項目重點 -->
       <div class="execution-block" style="border-radius: 8px;">
-        <div class="execution-title">執行經歷</div>
-        <ul class="execution-list">
-          <li><strong>全程參與</strong>：完整參與一本書的誕生，從前期的龐雜資訊整合、視覺素材製作，到後期的版面編排設計與最終印刷輸出完稿。</li>
-          <li><strong>數據視覺化</strong>：梳理 12 種動物的頭骨構造與生態資料，轉化為直覺、清晰的資訊圖表。</li>
-          <li><strong>影像與插畫處理</strong>：為每種動物量身繪製 3 款功能插圖，並精細完成頭骨影像後製。</li>
-        </ul>
+        <div class="execution-title">負責項目</div>
+        <p class="execution-desc">負責書籍製作，統整團隊前期的資訊與視覺轉譯，並執行版面圖文編排、印前實務至最終裝幀產出。</p>
       </div>
     </section>
 
@@ -660,7 +762,7 @@
         <div class="flipbook-header">
           <div class="flipbook-title-wrap">
             <h2>《Animal Teeth》書籍設計</h2>
-            <span class="flipbook-tip">💡 支援拖曳頁角翻閱、點擊按鈕、鍵盤左右箭頭（← / →）或開啟全螢幕</span>
+            <span class="flipbook-tip">支援翻頁或全螢幕閱讀</span>
           </div>
         </div>
 
@@ -718,7 +820,7 @@
           controls 
           playsinline 
           preload="none" 
-          poster="Capstone%20Project/web_assets/intro2.webp"
+          poster="Capstone%20Project/web_assets/exhibition_display.webp"
         >
           <source src="Capstone%20Project/web_assets/exhibition1.mp4" type="video/mp4">
           <source src="Capstone%20Project/exhibition1.MOV" type="video/quicktime">
@@ -726,6 +828,55 @@
         </video>
       </div>
 
+      <!-- 專題紀錄區 (縮小比例 · 無效果 · 不放大) -->
+      <div class="project-drafts-archive">
+        <div class="drafts-header">
+          <div>
+            <span class="draft-badge">PROJECT ARCHIVE</span>
+            <h3 class="drafts-title">專題紀錄</h3>
+          </div>
+        </div>
+
+        <!-- 縮小比例網格 (純照片呈現、無效果、無註解、不放大) -->
+        <div class="drafts-grid">
+
+          <!-- 1. 專題製作紀錄 1 -->
+          <div class="capstone-draft-card">
+            <div class="draft-img-container">
+              <img src="Capstone%20Project/專題製作紀錄1.jpeg" alt="專題製作紀錄1" loading="lazy" />
+            </div>
+          </div>
+
+          <!-- 2. 專題製作紀錄 2 -->
+          <div class="capstone-draft-card">
+            <div class="draft-img-container">
+              <img src="Capstone%20Project/專題製作紀錄2.jpeg" alt="專題製作紀錄2" loading="lazy" />
+            </div>
+          </div>
+
+          <!-- 3. 專題製作紀錄 3 -->
+          <div class="capstone-draft-card">
+            <div class="draft-img-container">
+              <img src="Capstone%20Project/專題製作紀錄3.jpeg" alt="專題製作紀錄3" loading="lazy" />
+            </div>
+          </div>
+
+          <!-- 4. 專題製作紀錄 4 -->
+          <div class="capstone-draft-card">
+            <div class="draft-img-container">
+              <img src="Capstone%20Project/專題製作紀錄4.jpg" alt="專題製作紀錄4" loading="lazy" />
+            </div>
+          </div>
+
+          <!-- 5. 專題製作紀錄 5 -->
+          <div class="capstone-draft-card">
+            <div class="draft-img-container">
+              <img src="Capstone%20Project/專題製作紀錄5.jpeg" alt="專題製作紀錄5" loading="lazy" />
+            </div>
+          </div>
+
+        </div>
+      </div>
     </section>
 
     <!-- 四、 頁尾聯絡資訊與版權宣告 -->
@@ -737,12 +888,11 @@
   </main>
 
   <script>
-    // 1. 色彩主題切換邏輯
+    // 1. 色彩主題切換邏輯（預設深色模式）
     const themeToggle = document.getElementById("theme-toggle");
-    const themeIcon = themeToggle.querySelector(".theme-icon");
+    const themeIcon = themeToggle ? themeToggle.querySelector(".theme-icon") : null;
 
-    const savedTheme = localStorage.getItem("peggy-portfolio-theme") ||
-      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+    const savedTheme = localStorage.getItem("peggy-portfolio-theme-v2") || "dark";
 
     const setTheme = (theme) => {
       if (theme === "dark") {
@@ -752,15 +902,18 @@
         document.documentElement.removeAttribute("data-theme");
         if (themeIcon) themeIcon.textContent = "☀️";
       }
-      localStorage.setItem("peggy-portfolio-theme", theme);
     };
 
     setTheme(savedTheme);
 
-    themeToggle.addEventListener("click", () => {
-      const currentTheme = document.documentElement.getAttribute("data-theme");
-      setTheme(currentTheme === "dark" ? "light" : "dark");
-    });
+    if (themeToggle) {
+      themeToggle.addEventListener("click", () => {
+        const currentTheme = document.documentElement.getAttribute("data-theme");
+        const nextTheme = currentTheme === "dark" ? "light" : "dark";
+        setTheme(nextTheme);
+        localStorage.setItem("peggy-portfolio-theme-v2", nextTheme);
+      });
+    }
 
     // 2. 3D 翻頁電子書初始化
     document.addEventListener("DOMContentLoaded", function () {
@@ -948,10 +1101,15 @@
           btnFullscreen.textContent = "⛶ 全螢幕閱讀";
         }
       });
+
+    });
+
+    // 清除舊版視覺編輯器快取，確保完全載入最新程式碼
+    ['portfolio_draft_', 'portfolio_settings_'].forEach(prefix => {
+      Object.keys(localStorage).forEach(key => {
+        if (key.startsWith(prefix)) localStorage.removeItem(key);
+      });
     });
   </script>
-
-  <!-- 視覺調校與文字直改開關 (A 方案 HUD) -->
-  <script src="assets/live-editor.js"></script>
 </body>
 </html>

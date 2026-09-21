@@ -1,62 +1,46 @@
 <!DOCTYPE html>
-<html lang="zh-Hant">
+<html lang="zh-TW" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>郭佩綺 · 作品集 Portfolio</title>
   <meta name="description" content="郭佩綺個人作品集：陌生益所品牌視覺、咬牙切齒資訊圖表與書籍設計、平面與社群視覺設計。">
 
-  <!-- 字型 -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@400;500;600&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #fdfbf4;
-      --text: #2b2725;
-      --text-muted: #6b635e;
+      --bg: #f7f6f2;
+      --text: #1a1a1a;
+      --text-muted: #666;
+      --line: #ddd;
       --accent: #967155;
-      --line: rgba(150, 113, 85, 0.18);
-      --card-bg: rgba(150, 113, 85, 0.035);
-      --font-title: "Noto Serif TC", serif;
-      --font-body: "Noto Sans TC", sans-serif;
-      --max-width: 1200px;
-      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-      --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
-
-      --space-xs: 0.35rem;
-      --space-sm: 0.5625rem;
-      --space-md: 0.9375rem;
-      --space-lg: 1.35rem;
-      --space-xl: 2.4rem;
-      --space-xxl: 3.2rem;
+      --font-title: "Noto Serif TC", "Helvetica Neue", serif;
+      --font-body: "Noto Sans TC", "Helvetica Neue", Helvetica, Arial, sans-serif;
     }
 
     [data-theme="dark"] {
       --bg: #12100e;
       --text: #f2ece4;
       --text-muted: #a39990;
+      --line: rgba(255, 255, 255, 0.15);
       --accent: #d99b64;
-      --line: rgba(217, 155, 100, 0.2);
-      --card-bg: rgba(217, 155, 100, 0.04);
     }
 
+    /* 基礎設定 */
     *, *::before, *::after {
       box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    html {
-      scroll-behavior: smooth;
     }
 
     body {
+      margin: 0;
+      padding: 0;
       font-family: var(--font-body);
       background-color: var(--bg);
       color: var(--text);
-      line-height: 1.35;
+      line-height: 1.6;
       transition: background-color 0.3s ease, color 0.3s ease;
       min-height: 100vh;
       display: flex;
@@ -64,409 +48,328 @@
     }
 
     a {
-      color: inherit;
       text-decoration: none;
+      color: inherit;
     }
 
-    img {
-      max-width: 100%;
-      height: auto;
-      display: block;
-    }
-
-    /* 頂部導覽列 (Flexbox 兩側對齊) */
-    .site-header {
+    /* 導覽列 */
+    header {
       position: sticky;
       top: 0;
       z-index: 100;
-      background-color: rgba(253, 251, 244, 0.88);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--line);
-      transition: background-color 0.3s ease, border-color 0.3s ease;
-    }
-
-    [data-theme="dark"] .site-header {
-      background-color: rgba(18, 16, 14, 0.88);
-    }
-
-    .navbar {
-      max-width: var(--max-width);
-      margin: 0 auto;
-      padding: 1.1rem 1.5rem;
+      background-color: var(--bg);
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding: 20px 40px;
+      border-bottom: 1px solid var(--line);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
     }
 
-    .logo {
+    .header-title {
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 1px;
       font-family: var(--font-title);
-      font-size: 1.05rem;
-      font-weight: 600;
-      letter-spacing: 2px;
-      color: var(--text);
-      transition: opacity 0.2s ease;
     }
 
-    .logo:hover {
-      opacity: 0.75;
-    }
-
-    .nav-right {
+    nav {
       display: flex;
       align-items: center;
-      gap: 24px;
     }
 
-    .nav-link {
-      font-size: 0.88rem;
+    nav a {
       color: var(--text-muted);
-      letter-spacing: 1.2px;
-      position: relative;
-      padding: 4px 0;
-      white-space: nowrap;
-      transition: color 0.2s ease;
+      margin-left: 30px;
+      font-size: 15px;
+      letter-spacing: 1px;
+      transition: color 0.3s ease;
     }
 
-    .nav-link:hover {
-      color: var(--accent);
+    nav a:hover, nav a.active {
+      color: var(--text);
+      font-weight: 500;
     }
 
-    .nav-link.active {
-      color: var(--accent);
-      font-weight: 600;
-    }
-
-    .nav-link.active::after {
-      content: "";
-      position: absolute;
-      bottom: -3px;
-      left: 0;
-      width: 100%;
-      height: 2px;
-      background-color: var(--accent);
-      border-radius: 1px;
-    }
-
-    /* 色彩切換按鈕 */
     .theme-btn {
       background: transparent;
       border: none;
-      font-size: 20px;
+      font-size: 18px;
       cursor: pointer;
+      margin-left: 24px;
       padding: 2px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
       line-height: 1;
-      transition: transform 0.25s var(--ease-spring), opacity 0.2s ease;
+      transition: transform 0.2s ease;
     }
 
     .theme-btn:hover {
       transform: scale(1.2) rotate(15deg);
-      opacity: 0.85;
     }
 
-    /* 首頁主容器 */
-    .homepage-main {
-      flex: 1;
-      max-width: var(--max-width);
-      width: 100%;
+    /* 首頁自我介紹區塊 */
+    .hero-section {
+      padding: 80px 40px;
+      border-bottom: 1px solid var(--line);
+      max-width: 1280px;
       margin: 0 auto;
-      padding: 2.5rem 1.5rem 3.5rem;
+      width: 100%;
     }
 
-    /* 首頁引導標題 */
-    .home-hero {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-
-    .home-eyebrow {
-      font-size: 0.75rem;
-      color: var(--accent);
-      letter-spacing: 3px;
-      margin-bottom: 0.35rem;
-    }
-
-    .home-title {
+    .hero-title {
       font-family: var(--font-title);
-      font-size: clamp(1.6rem, 4vw, 2.2rem);
-      font-weight: 500;
-      letter-spacing: 2.5px;
+      font-size: 32px;
+      font-weight: bold;
+      margin: 0 0 24px 0;
+      letter-spacing: 2px;
+    }
+
+    .hero-description {
+      font-size: 15px;
+      line-height: 1.85;
       color: var(--text);
-      margin-bottom: 0.4rem;
+      opacity: 0.9;
+      max-width: 750px;
+      margin-bottom: 32px;
     }
 
-    .home-subtitle {
-      font-size: 0.92rem;
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .tag {
+      font-size: 12px;
+      border: 1px solid var(--text);
+      padding: 6px 14px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      transition: background-color 0.2s, color 0.2s;
+    }
+
+    .tag:hover {
+      background-color: var(--text);
+      color: var(--bg);
+    }
+
+    /* 瀑布流專案網格區塊 (參考 yansu KIM 排版) */
+    .portfolio-section {
+      padding: 60px 40px 80px;
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+      flex: 1;
+    }
+
+    .section-title {
+      font-size: 13px;
       color: var(--text-muted);
-      font-weight: 300;
-      letter-spacing: 1.5px;
+      margin-bottom: 40px;
+      letter-spacing: 2px;
+      font-weight: 500;
     }
-
-    /* 純視覺網格佈局（上二下一） */
-    .home-gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 1.75rem;
+    
+    /* CSS Columns 瀑布流：完全依照原始比例縮放，不裁切 */
+    .masonry-container {
+      column-count: 2; /* 雙欄排列 */
+      column-gap: 40px; /* 欄位間距 */
     }
-
-    /* 專案卡片連結 */
+    
     .project-card {
       display: block;
-      position: relative;
-      border: 1px solid var(--line);
-      border-radius: 8px;
-      overflow: hidden;
-      background: var(--card-bg);
-      box-shadow: 0 6px 24px rgba(43, 39, 37, 0.04);
-      transition: transform 0.4s var(--ease-spring), box-shadow 0.3s ease, border-color 0.3s ease;
+      margin-bottom: 60px; /* 上下卡片間距 */
+      break-inside: avoid; /* 避免單一卡片被切斷分到兩欄 */
+      transition: transform 0.3s ease;
     }
 
     .project-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 16px 36px rgba(43, 39, 37, 0.1);
-      border-color: var(--accent);
+      transform: translateY(-5px);
     }
-
-    /* 卡片比例控制 */
-    .card-media-wrap {
+    
+    .project-image {
       width: 100%;
-      overflow: hidden;
-      position: relative;
+      height: auto; /* 解除高度限制，完全依照原始比例縮放 */
+      display: block;
+      border-radius: 4px;
+      margin-bottom: 16px;
+      background-color: rgba(0, 0, 0, 0.03);
     }
-
-    .card-media-4-3 {
-      aspect-ratio: 4 / 3;
-    }
-
-    .card-media-banner {
-      aspect-ratio: 21 / 9;
-    }
-
-    .project-card img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.6s var(--ease-smooth), filter 0.4s ease;
-    }
-
-    .project-card:hover img {
-      transform: scale(1.03);
-    }
-
-    /* 專案卡片底部簡潔標籤欄 */
-    .card-info-bar {
-      padding: 1rem 1.25rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      border-top: 1px solid var(--line);
-      background: var(--bg);
-      transition: background 0.3s ease;
-    }
-
-    .card-title {
+    
+    .project-info h3 {
       font-family: var(--font-title);
-      font-size: 1.05rem;
-      font-weight: 600;
-      letter-spacing: 1.5px;
-      color: var(--text);
-    }
-
-    .card-tag {
-      font-size: 0.8rem;
-      color: var(--text-muted);
+      font-size: 20px;
+      margin: 0 0 6px 0;
       letter-spacing: 1px;
-      font-weight: 300;
     }
 
-    .card-arrow {
-      font-size: 1rem;
-      color: var(--accent);
-      transition: transform 0.25s var(--ease-spring);
+    .project-info p {
+      font-size: 14px;
+      color: var(--text-muted);
+      margin: 0;
+      letter-spacing: 0.5px;
     }
 
-    .project-card:hover .card-arrow {
-      transform: translateX(4px);
-    }
-
-    /* 下方橫幅卡片橫跨兩欄 */
-    .card-full-width {
-      grid-column: 1 / -1;
-    }
-
-    /* 頁尾低調純文字排版 */
-    .site-footer {
-      margin-top: auto;
-      padding: 2rem 1.5rem;
+    /* 頁尾 */
+    footer {
+      padding: 40px;
+      font-size: 14px;
       border-top: 1px solid var(--line);
+      color: var(--text-muted);
+      line-height: 1.6;
       text-align: center;
     }
 
-    .footer-contact {
-      font-size: 0.88rem;
-      color: var(--text-muted);
-      margin-bottom: 0.35rem;
-      letter-spacing: 1px;
-      font-weight: 300;
-    }
-
-    .footer-contact a {
-      color: inherit;
-      transition: color 0.2s ease;
-    }
-
-    .footer-contact a:hover {
-      color: var(--accent);
-      text-decoration: underline;
-    }
-
-    .copyright-text {
-      font-size: 0.75rem;
-      color: var(--text-muted);
-      opacity: 0.7;
-      letter-spacing: 1px;
-    }
-
+    /* 響應式：手機版改為單欄 */
     @media (max-width: 768px) {
-      .navbar {
-        padding: 1rem;
+      header {
+        padding: 16px 20px;
       }
-      .nav-right {
-        gap: 14px;
+      nav a {
+        margin-left: 16px;
+        font-size: 14px;
       }
-      .nav-link {
-        font-size: 0.82rem;
+      .hero-section {
+        padding: 50px 20px;
       }
-      .home-gallery-grid {
-        grid-template-columns: 1fr;
-        gap: 1.25rem;
+      .hero-title {
+        font-size: 26px;
       }
-      .card-full-width {
-        grid-column: 1;
+      .portfolio-section {
+        padding: 40px 20px 60px;
       }
-      .card-media-banner {
-        aspect-ratio: 16 / 9;
+      .masonry-container {
+        column-count: 1;
+        column-gap: 0;
+      }
+      .project-card {
+        margin-bottom: 40px;
+      }
+      footer {
+        padding: 30px 20px;
       }
     }
   </style>
 </head>
 <body>
 
-  <!-- 頂部導覽列 (Flexbox 兩側對齊) -->
-  <header class="site-header">
-    <nav class="navbar">
-      <!-- 左側 -->
-      <a href="index.html" class="logo">郭佩綺 · 作品集</a>
+<header>
+  <div class="header-title">
+    <a href="index.html">郭佩綺 · Portfolio</a>
+  </div>
+  <nav>
+    <a href="stranger.html">網頁美編</a>
+    <a href="animal-teeth.html">專題製作</a>
+    <a href="graphic-design.html">平面設計</a>
+    <button id="theme-toggle" class="theme-btn" aria-label="切換色彩模式" title="切換色彩模式">
+      <span class="theme-icon">🌙</span>
+    </button>
+  </nav>
+</header>
 
-      <!-- 右側 -->
-      <div class="nav-right">
-        <a href="stranger.html" class="nav-link">網頁美編</a>
-        <a href="animal-teeth.html" class="nav-link">專題製作</a>
-        <a href="graphic-design.html" class="nav-link">平面設計</a>
-        <!-- 色彩切換按鈕 -->
-        <button id="theme-toggle" class="theme-btn" aria-label="切換色彩模式" title="切換色彩模式">
-          <span class="theme-icon">☀️</span>
-        </button>
+<div class="hero-section">
+  <h1 class="hero-title">Hello, 我是 佩綺。</h1>
+  <p class="hero-description">
+    專注於視覺排版與資訊設計。<br>
+    擅長將複雜資訊轉化為易讀的視覺介面，曾執行平面書籍到數位電商品牌。<br><br>
+    <strong>設計軟體：</strong>Illustrator · Photoshop · InDesign · Procreate · Canva<br>
+    <strong>AI協作工具：</strong>Google Antigravity, Cursor, Gemini, Chat gpt<br>
+    <strong>前端網頁基礎：</strong>RWD 響應式網頁設計, HTML/CSS
+  </p>
+  <div class="hero-tags">
+    <span class="tag">#品牌視覺網頁</span>
+    <span class="tag">#社群圖文設計</span>
+    <span class="tag">#書籍排版設計</span>
+    <span class="tag">#字體設計</span>
+  </div>
+</div>
+
+<div class="portfolio-section">
+  <div class="section-title">SELECTED WORKS</div>
+  
+  <!-- yansu KIM 瀑布流容器：保留原始比例無裁切 -->
+  <div class="masonry-container">
+    
+    <!-- 專案 1：網頁美編 -->
+    <a href="stranger.html" class="project-card">
+      <img src="assets/web-mockup.jpg" alt="陌生益所 電商平台網頁美編" class="project-image" loading="lazy">
+      <div class="project-info">
+        <h3>陌生益所</h3>
+        <p>電商平台 · 網頁美編</p>
       </div>
-    </nav>
-  </header>
+    </a>
 
-  <!-- 主展示區：純視覺大圖網格（上二下一佈局） -->
-  <main class="homepage-main">
-    <div class="home-hero">
-      <p class="home-eyebrow">PORTFOLIO</p>
-      <h1 class="home-title">設計精選作品</h1>
-      <p class="home-subtitle">品牌視覺 · 資訊圖表與書籍 · 社群行銷設計</p>
-    </div>
+    <!-- 專案 2：專題製作 -->
+    <a href="animal-teeth.html" class="project-card">
+      <img src="Capstone%20Project/web_assets/teeth.png" alt="咬牙切齒 資訊圖表與書籍設計" class="project-image" loading="lazy">
+      <div class="project-info">
+        <h3>咬牙切齒</h3>
+        <p>專題製作 · 資訊圖表與書籍設計</p>
+      </div>
+    </a>
 
-    <div class="home-gallery-grid">
+    <!-- 專案 3：字體設計 -->
+    <a href="graphic-design.html#typography" class="project-card">
+      <img src="assets/graphic/ning-jing-cover.png" alt="凝境體 字體設計" class="project-image" loading="lazy">
+      <div class="project-info">
+        <h3>凝境體</h3>
+        <p>字體設計</p>
+      </div>
+    </a>
+    
+    <!-- 專案 4：平面設計 -->
+    <a href="graphic-design.html#packaging" class="project-card">
+      <img src="assets/graphic/pkg-02.webp" alt="祈福堂 · 五福發財糕 平面包裝設計" class="project-image" loading="lazy">
+      <div class="project-info">
+        <h3>祈福堂 · 五福發財糕</h3>
+        <p>平面設計 · 伴手禮盒包裝</p>
+      </div>
+    </a>
 
-      <!-- 專案 1：網頁美編 (左上 4:3) -->
-      <a href="stranger.html" class="project-card" title="查看 網頁美編 專案完整內容">
-        <div class="card-media-wrap card-media-4-3">
-          <img src="assets/web-mockup.jpg" alt="陌生益所 電商平台網頁美編" loading="lazy">
-        </div>
-        <div class="card-info-bar">
-          <div>
-            <div class="card-title">網頁美編</div>
-            <div class="card-tag">電商平台網頁美編 · 實體活動課程</div>
-          </div>
-          <span class="card-arrow">→</span>
-        </div>
-      </a>
+  </div>
+</div>
 
-      <!-- 專案 2：專題製作 (右上 4:3) -->
-      <a href="animal-teeth.html" class="project-card" title="查看 專題製作 專案完整內容">
-        <div class="card-media-wrap card-media-4-3">
-          <img src="Capstone%20Project/web_assets/intro2.webp" alt="咬牙切齒 資訊圖表與書籍設計" loading="lazy">
-        </div>
-        <div class="card-info-bar">
-          <div>
-            <div class="card-title">專題製作</div>
-            <div class="card-tag">專題製作 · 資訊圖表設計</div>
-          </div>
-          <span class="card-arrow">→</span>
-        </div>
-      </a>
+<footer>
+  聯絡方式 <a href="mailto:spad9111@gmail.com">spad9111@gmail.com</a><br>
+  © 2026 郭佩綺 作品集。版權所有。
+</footer>
 
-      <!-- 專案 3：平面設計 (下方橫幅 21:9 跨兩欄 · 作品整理中) -->
-      <a href="graphic-design.html" class="project-card card-full-width" title="查看 平面設計（作品整理中）">
-        <div class="card-media-wrap card-media-banner" style="display: flex; align-items: center; justify-content: center; background: var(--card-bg);">
-          <div style="text-align: center; padding: 2rem 1rem;">
-            <div style="font-size: 2rem; margin-bottom: 0.6rem; opacity: 0.85;">🎨</div>
-            <div style="font-family: var(--font-title); font-size: 1.15rem; letter-spacing: 2.5px; color: var(--text); font-weight: 500;">平面設計作品整理中</div>
-            <div style="font-size: 0.78rem; color: var(--text-muted); letter-spacing: 1.5px; margin-top: 0.35rem;">COMING SOON · 敬請期待</div>
-          </div>
-        </div>
-        <div class="card-info-bar">
-          <div>
-            <div class="card-title">平面設計</div>
-            <div class="card-tag">作品整理中 · 敬請期待</div>
-          </div>
-          <span class="card-arrow">→</span>
-        </div>
-      </a>
+<script>
+  // 主題色彩切換邏輯（預設深色模式）
+  const themeToggle = document.getElementById("theme-toggle");
+  const themeIcon = themeToggle ? themeToggle.querySelector(".theme-icon") : null;
 
-    </div>
-  </main>
+  const savedTheme = localStorage.getItem("peggy-portfolio-theme-v2") || "dark";
 
-  <!-- 頁尾聯絡資訊與版權宣告 -->
-  <footer class="site-footer">
-    <p class="footer-contact">聯絡方式 <a href="mailto:spad9111@gmail.com">spad9111@gmail.com</a></p>
-    <p class="copyright-text">© 2026 郭佩綺 作品集。版權所有。</p>
-  </footer>
+  const setTheme = (theme) => {
+    if (theme === "dark") {
+      document.documentElement.setAttribute("data-theme", "dark");
+      if (themeIcon) themeIcon.textContent = "🌙";
+    } else {
+      document.documentElement.removeAttribute("data-theme");
+      if (themeIcon) themeIcon.textContent = "☀️";
+    }
+  };
 
-  <script>
-    // 主題切換邏輯
-    const themeToggle = document.getElementById("theme-toggle");
-    const themeIcon = themeToggle.querySelector(".theme-icon");
+  setTheme(savedTheme);
 
-    const savedTheme = localStorage.getItem("peggy-portfolio-theme") ||
-      (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
-
-    const setTheme = (theme) => {
-      if (theme === "dark") {
-        document.documentElement.setAttribute("data-theme", "dark");
-        if (themeIcon) themeIcon.textContent = "🌙";
-      } else {
-        document.documentElement.removeAttribute("data-theme");
-        if (themeIcon) themeIcon.textContent = "☀️";
-      }
-      localStorage.setItem("peggy-portfolio-theme", theme);
-    };
-
-    setTheme(savedTheme);
-
+  if (themeToggle) {
     themeToggle.addEventListener("click", () => {
       const currentTheme = document.documentElement.getAttribute("data-theme");
-      setTheme(currentTheme === "dark" ? "light" : "dark");
+      const nextTheme = currentTheme === "dark" ? "light" : "dark";
+      setTheme(nextTheme);
+      localStorage.setItem("peggy-portfolio-theme-v2", nextTheme);
     });
-  </script>
+  }
 
-  <!-- 視覺調校與文字直改開關 (A 方案 HUD) -->
-  <script src="assets/live-editor.js"></script>
+  // 清除舊版視覺編輯器快取與舊版淺色設定
+  ['portfolio_draft_', 'portfolio_settings_', 'peggy-portfolio-theme'].forEach(prefix => {
+    Object.keys(localStorage).forEach(key => {
+      if (key.startsWith(prefix) || key === 'peggy-portfolio-theme') localStorage.removeItem(key);
+    });
+  });
+</script>
+
 </body>
 </html>
