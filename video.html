@@ -667,7 +667,7 @@
       <div class="video-grid">
         
         <!-- 作品 1：芭樂動畫特輯 -->
-        <article class="video-card" id="card-guava" data-type="youtube" data-title="國民水果「芭樂」特輯！水果知識網" data-subtitle="農業知識科普動畫 · 農業知識入口網典藏收錄" data-src="https://www.youtube.com/embed/zvBlymCTSog?autoplay=1" data-source-url="https://kmweb.moa.gov.tw/theme_data.php?theme=farmer_videoView&id=10">
+        <article class="video-card" id="card-guava" data-type="native" data-aspect="landscape" data-title="國民水果「芭樂」特輯！水果知識網" data-subtitle="農業知識科普動畫 · 農業知識入口網官方典藏收錄" data-src="assets/video/guava-animation.mp4" data-source-url="https://kmweb.moa.gov.tw/theme_data.php?theme=farmer_videoView&id=10" data-yt-url="https://www.youtube.com/watch?v=zvBlymCTSog">
           <div class="thumb-wrapper thumb-landscape">
             <span class="card-badge">橫式 16:9 · 知識動畫</span>
             <img src="assets/video/guava-cover.jpg" alt="國民水果「芭樂」特輯！水果知識網" class="thumb-image" loading="lazy">
@@ -702,7 +702,7 @@
         </article>
 
         <!-- 作品 2：音樂與日常短影音 -->
-        <article class="video-card" id="card-music" data-type="native" data-title="音樂與日常 · Live Reel" data-subtitle="現場音樂演出紀錄 · 直式節奏短影音" data-src="assets/video/music-daily.mp4">
+        <article class="video-card" id="card-music" data-type="native" data-aspect="portrait" data-title="音樂與日常 · Live Reel" data-subtitle="現場音樂演出紀錄 · 直式節奏短影音" data-src="assets/video/music-daily.mp4">
           <div class="thumb-wrapper thumb-portrait">
             <span class="card-badge">直式 9:16 · 音樂短影音</span>
             <img src="assets/video/music-daily-cover.png" alt="音樂與日常 Live Reel" class="thumb-image" loading="lazy">
@@ -823,16 +823,27 @@
 
     const openModal = (card) => {
       const type = card.getAttribute("data-type");
+      const aspect = card.getAttribute("data-aspect");
       const title = card.getAttribute("data-title");
       const subtitle = card.getAttribute("data-subtitle");
       const src = card.getAttribute("data-src");
       const sourceUrl = card.getAttribute("data-source-url");
+      const ytUrl = card.getAttribute("data-yt-url");
 
       modalTitle.textContent = title;
       modalSubtitle.textContent = subtitle;
 
+      // 建立外部連結
+      let linksHtml = [];
+      if (ytUrl) {
+        linksHtml.push(`<a href="${ytUrl}" target="_blank" rel="noopener">YouTube 原始影片 ↗</a>`);
+      }
       if (sourceUrl) {
-        modalSourceLink.href = sourceUrl;
+        linksHtml.push(`<a href="${sourceUrl}" target="_blank" rel="noopener">農業知識入口網典藏 ↗</a>`);
+      }
+
+      if (linksHtml.length > 0) {
+        modalSourceLinkWrap.innerHTML = linksHtml.join(" &nbsp;·&nbsp; ");
         modalSourceLinkWrap.style.display = "inline";
       } else {
         modalSourceLinkWrap.style.display = "none";
@@ -841,8 +852,24 @@
       // 清空媒體容器
       modalContainer.innerHTML = "";
 
-      if (type === "youtube") {
+      // 依比例決定容器尺寸
+      if (aspect === "portrait") {
+        modalBox.classList.add("is-vertical");
+      } else {
         modalBox.classList.remove("is-vertical");
+      }
+
+      if (type === "native") {
+        const video = document.createElement("video");
+        video.src = src;
+        video.controls = true;
+        video.autoplay = true;
+        video.playsInline = true;
+        if (aspect === "portrait") {
+          video.loop = true;
+        }
+        modalContainer.appendChild(video);
+      } else if (type === "youtube") {
         const iframe = document.createElement("iframe");
         iframe.src = src;
         iframe.title = title;
@@ -850,15 +877,6 @@
         iframe.allowFullscreen = true;
         iframe.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
         modalContainer.appendChild(iframe);
-      } else if (type === "native") {
-        modalBox.classList.add("is-vertical");
-        const video = document.createElement("video");
-        video.src = src;
-        video.controls = true;
-        video.autoplay = true;
-        video.playsInline = true;
-        video.loop = true;
-        modalContainer.appendChild(video);
       }
 
       modal.classList.add("is-open");
