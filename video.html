@@ -1,0 +1,903 @@
+<!DOCTYPE html>
+<html lang="zh-Hant" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>影片剪輯 — 郭佩綺 作品集</title>
+  <meta name="description" content="郭佩綺影片剪輯與動態影像作品：農業知識入口網科普動畫、現場音樂演出直式短影音。">
+
+  <!-- 字型 -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --bg: #fdfbf4;
+      --text: #2b2725;
+      --text-muted: #6b635e;
+      --accent: #967155;
+      --line: rgba(150, 113, 85, 0.18);
+      --card-bg: rgba(150, 113, 85, 0.035);
+      --font-title: "Noto Serif TC", serif;
+      --font-body: "Noto Sans TC", sans-serif;
+      --font-mono: "Space Mono", monospace;
+      --max-width: 1240px;
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-theme="dark"] {
+      --bg: #12100e;
+      --text: #f2ece4;
+      --text-muted: #a39990;
+      --accent: #d99b64;
+      --line: rgba(217, 155, 100, 0.2);
+      --card-bg: rgba(217, 155, 100, 0.04);
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: var(--font-body);
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    img {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    /* 頂部導覽列 */
+    .site-header {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background-color: rgba(253, 251, 244, 0.92);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--line);
+      transition: background-color 0.3s ease, border-color 0.3s ease;
+    }
+
+    [data-theme="dark"] .site-header {
+      background-color: rgba(18, 16, 14, 0.92);
+    }
+
+    .navbar {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 1.1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-family: var(--font-title);
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 2px;
+      color: var(--text);
+      transition: opacity 0.2s ease;
+    }
+
+    .logo:hover {
+      opacity: 0.75;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 28px;
+    }
+
+    .nav-link {
+      color: var(--text-muted);
+      font-size: 0.95rem;
+      letter-spacing: 1px;
+      transition: color 0.25s ease;
+      position: relative;
+    }
+
+    .nav-link:hover,
+    .nav-link.active {
+      color: var(--text);
+      font-weight: 500;
+    }
+
+    .nav-link.active::after {
+      content: "";
+      position: absolute;
+      bottom: -6px;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background-color: var(--accent);
+      border-radius: 1px;
+    }
+
+    .theme-btn {
+      background: transparent;
+      border: none;
+      font-size: 1.1rem;
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+      transition: transform 0.3s var(--ease-spring);
+    }
+
+    .theme-btn:hover {
+      transform: scale(1.2) rotate(15deg);
+    }
+
+    /* 容器 */
+    .container {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 2rem;
+      width: 100%;
+      flex: 1;
+    }
+
+    /* Hero 引言區塊 */
+    .hero-section {
+      padding: 4.5rem 0 3rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--accent);
+      letter-spacing: 3px;
+      text-transform: uppercase;
+      margin-bottom: 0.8rem;
+    }
+
+    .hero-title {
+      font-family: var(--font-title);
+      font-size: 2.5rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      margin-bottom: 1.2rem;
+      line-height: 1.2;
+    }
+
+    .hero-description {
+      font-size: 1.05rem;
+      line-height: 1.85;
+      color: var(--text);
+      opacity: 0.9;
+      max-width: 780px;
+      margin-bottom: 1.8rem;
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .tag {
+      font-size: 0.82rem;
+      border: 1px solid var(--line);
+      padding: 5px 14px;
+      border-radius: 20px;
+      letter-spacing: 0.8px;
+      color: var(--text-muted);
+      background-color: var(--card-bg);
+      transition: all 0.25s var(--ease-spring);
+    }
+
+    .tag:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-2px);
+    }
+
+    /* 影片畫廊網格 */
+    .gallery-section {
+      padding: 3.5rem 0 5rem;
+    }
+
+    .section-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      letter-spacing: 2.5px;
+      color: var(--text-muted);
+      margin-bottom: 2.2rem;
+      text-transform: uppercase;
+    }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: 1.25fr 0.95fr;
+      gap: 3rem;
+      align-items: start;
+    }
+
+    /* 影片卡片 */
+    .video-card {
+      background: var(--card-bg);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.35s var(--ease-spring), border-color 0.3s ease, box-shadow 0.35s ease;
+      cursor: pointer;
+    }
+
+    .video-card:hover {
+      transform: translateY(-6px);
+      border-color: var(--accent);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+    }
+
+    [data-theme="dark"] .video-card:hover {
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+    }
+
+    /* 縮圖外框 */
+    .thumb-wrapper {
+      position: relative;
+      width: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+
+    /* 橫式 16:9 */
+    .thumb-landscape {
+      aspect-ratio: 16 / 9;
+    }
+
+    /* 直式 9:16（卡片上做優雅適度裁切展示） */
+    .thumb-portrait {
+      aspect-ratio: 16 / 11;
+    }
+
+    .thumb-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease-smooth), opacity 0.3s ease;
+    }
+
+    .video-card:hover .thumb-image {
+      transform: scale(1.04);
+      opacity: 0.88;
+    }
+
+    /* 播放按鈕圖示浮層 */
+    .play-badge {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1);
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      background: rgba(18, 16, 14, 0.72);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #fff;
+      transition: transform 0.35s var(--ease-spring), background-color 0.3s ease;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    }
+
+    .play-badge svg {
+      width: 26px;
+      height: 26px;
+      margin-left: 3px; /* 光學置中 */
+      fill: currentColor;
+    }
+
+    .video-card:hover .play-badge {
+      transform: translate(-50%, -50%) scale(1.15);
+      background: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* 卡片徽章標籤 */
+    .card-badge {
+      position: absolute;
+      top: 14px;
+      left: 14px;
+      background: rgba(18, 16, 14, 0.78);
+      backdrop-filter: blur(6px);
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.8px;
+      font-weight: 500;
+    }
+
+    /* 影片資訊 */
+    .card-content {
+      padding: 1.8rem;
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+    }
+
+    .card-title {
+      font-family: var(--font-title);
+      font-size: 1.35rem;
+      font-weight: 600;
+      letter-spacing: 1px;
+      margin-bottom: 0.4rem;
+      color: var(--text);
+    }
+
+    .card-subtitle {
+      font-size: 0.9rem;
+      color: var(--accent);
+      font-weight: 500;
+      margin-bottom: 1rem;
+    }
+
+    .card-desc {
+      font-size: 0.95rem;
+      line-height: 1.7;
+      color: var(--text-muted);
+      margin-bottom: 1.4rem;
+      flex: 1;
+    }
+
+    .card-meta-list {
+      list-style: none;
+      border-top: 1px dashed var(--line);
+      padding-top: 1rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .card-meta-item {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      display: flex;
+    }
+
+    .card-meta-item strong {
+      color: var(--text);
+      min-width: 72px;
+      font-weight: 500;
+    }
+
+    .card-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--accent);
+      margin-top: auto;
+      letter-spacing: 0.5px;
+      transition: gap 0.25s var(--ease-spring);
+    }
+
+    .video-card:hover .card-action {
+      gap: 12px;
+    }
+
+    /* 燈箱播放器 (Lightbox Modal) */
+    .lightbox-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 999;
+      background: rgba(0, 0, 0, 0.88);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .lightbox-modal.is-open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-container {
+      background: #141210;
+      color: #f2ece4;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 14px;
+      overflow: hidden;
+      width: 100%;
+      max-width: 980px;
+      max-height: 92vh;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.6);
+      transform: scale(0.94);
+      transition: transform 0.35s var(--ease-spring);
+      position: relative;
+    }
+
+    .lightbox-modal.is-open .modal-container {
+      transform: scale(1);
+    }
+
+    /* 直式短影音專用容器尺寸 */
+    .modal-container.is-vertical {
+      max-width: 440px;
+      max-height: 88vh;
+    }
+
+    .modal-header {
+      padding: 1rem 1.4rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .modal-title-box h3 {
+      font-family: var(--font-title);
+      font-size: 1.1rem;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+      margin-bottom: 2px;
+    }
+
+    .modal-title-box p {
+      font-size: 0.8rem;
+      color: #a39990;
+    }
+
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #f2ece4;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 1.4rem;
+      line-height: 1;
+      transition: background-color 0.2s, transform 0.2s;
+    }
+
+    .modal-close-btn:hover {
+      background: var(--accent);
+      transform: scale(1.1);
+    }
+
+    /* 媒體內容區塊 */
+    .modal-media-body {
+      background: #000;
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      overflow: hidden;
+    }
+
+    /* 橫式 YouTube 比例 */
+    .modal-container:not(.is-vertical) .modal-media-body {
+      aspect-ratio: 16 / 9;
+      width: 100%;
+    }
+
+    .modal-container:not(.is-vertical) iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    /* 直式影片尺寸 */
+    .modal-container.is-vertical .modal-media-body {
+      width: 100%;
+      max-height: calc(88vh - 120px);
+      aspect-ratio: 9 / 16;
+    }
+
+    .modal-container.is-vertical video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      background: #000;
+    }
+
+    .modal-footer {
+      padding: 0.9rem 1.4rem;
+      font-size: 0.85rem;
+      color: #a39990;
+      background: #191614;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-footer a {
+      color: var(--accent);
+      text-decoration: underline;
+      font-weight: 500;
+    }
+
+    /* 頁面下方跨頁導覽 */
+    .page-nav {
+      border-top: 1px solid var(--line);
+      padding: 2.5rem 0;
+      display: flex;
+      justify-content: space-between;
+      margin-top: 2rem;
+    }
+
+    .page-nav-link {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: transform 0.2s ease;
+    }
+
+    .page-nav-link:hover {
+      transform: translateX(4px);
+      color: var(--accent);
+    }
+
+    .page-nav-link.prev:hover {
+      transform: translateX(-4px);
+    }
+
+    .page-nav-hint {
+      font-family: var(--font-mono);
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
+
+    .page-nav-title {
+      font-family: var(--font-title);
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+
+    /* 頁尾 */
+    footer {
+      padding: 3rem 2rem;
+      font-size: 0.9rem;
+      border-top: 1px solid var(--line);
+      color: var(--text-muted);
+      line-height: 1.6;
+      text-align: center;
+    }
+
+    /* 響應式佈局 */
+    @media (max-width: 900px) {
+      .video-grid {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+      .navbar {
+        padding: 1rem 1.2rem;
+      }
+      .nav-right {
+        gap: 16px;
+      }
+      .nav-link {
+        font-size: 0.9rem;
+      }
+      .hero-title {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 頂部導覽列 -->
+  <header class="site-header">
+    <nav class="navbar">
+      <a href="index.html" class="logo">郭佩綺 · 作品集</a>
+      <div class="nav-right">
+        <a href="stranger.html" class="nav-link">網頁美編</a>
+        <a href="animal-teeth.html" class="nav-link">專題製作</a>
+        <a href="graphic-design.html" class="nav-link">平面設計</a>
+        <a href="video.html" class="nav-link active">影片剪輯</a>
+        <button id="theme-toggle" class="theme-btn" aria-label="切換色彩模式" title="切換色彩模式">
+          <span class="theme-icon">🌙</span>
+        </button>
+      </div>
+    </nav>
+  </header>
+
+  <main class="container">
+    
+    <!-- 頂部 Hero 引言 -->
+    <section class="hero-section">
+      <p class="hero-eyebrow">MOTION & VIDEO EDITING</p>
+      <h1 class="hero-title">影片剪輯</h1>
+      <p class="hero-description">
+        專注於節奏流暢感與資訊動態敘事，涵蓋農業知識普及動畫短片與現場音樂短影音紀錄。<br>
+        擅長將龐雜資訊拆解轉譯為生動節奏，結合視覺分鏡腳本、動態剪輯與音畫同步感知。
+      </p>
+      <div class="hero-tags">
+        <span class="tag">#知識動畫</span>
+        <span class="tag">#音樂活動紀錄</span>
+        <span class="tag">#短影音</span>
+        <span class="tag">#節奏剪輯</span>
+        <span class="tag">#音畫同步</span>
+      </div>
+    </section>
+
+    <!-- 影片畫廊卡片列表 -->
+    <section class="gallery-section">
+      <div class="section-eyebrow">SELECTED VIDEO WORKS / 2 ITEMS</div>
+      
+      <div class="video-grid">
+        
+        <!-- 作品 1：芭樂動畫特輯 -->
+        <article class="video-card" id="card-guava" data-type="youtube" data-title="國民水果「芭樂」特輯！水果知識網" data-subtitle="農業知識科普動畫 · 農業知識入口網典藏收錄" data-src="https://www.youtube.com/embed/zvBlymCTSog?autoplay=1" data-source-url="https://kmweb.moa.gov.tw/theme_data.php?theme=farmer_videoView&id=10">
+          <div class="thumb-wrapper thumb-landscape">
+            <span class="card-badge">橫式 16:9 · 知識動畫</span>
+            <img src="assets/video/guava-cover.jpg" alt="國民水果「芭樂」特輯！水果知識網" class="thumb-image" loading="lazy">
+            <div class="play-badge" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+            </div>
+          </div>
+          <div class="card-content">
+            <h2 class="card-title">國民水果「芭樂」特輯</h2>
+            <div class="card-subtitle">農業知識科普動畫 · 農業知識入口網官方收錄</div>
+            <p class="card-desc">
+              以家鄉高雄阿蓮的芭樂果園記憶為發想，將國民水果的生長環境、營養指標與特調飲品，轉譯為生動流暢的動態科普動畫短片。
+            </p>
+            <ul class="card-meta-list">
+              <li class="card-meta-item">
+                <strong>負責項目</strong>
+                <span>企劃腳本 · 角色場景繪製 · 分鏡設計 · 動畫剪輯</span>
+              </li>
+              <li class="card-meta-item">
+                <strong>核心結構</strong>
+                <span>芭樂小百科 · 芭樂大家族品種 · 芭樂好食在飲品特調</span>
+              </li>
+              <li class="card-meta-item">
+                <strong>收錄單位</strong>
+                <span>農業知識入口網（農業部主題館）</span>
+              </li>
+            </ul>
+            <div class="card-action">
+              <span>點擊開啟劇場播放器 ↗</span>
+            </div>
+          </div>
+        </article>
+
+        <!-- 作品 2：音樂與日常短影音 -->
+        <article class="video-card" id="card-music" data-type="native" data-title="音樂與日常 · Live Reel" data-subtitle="現場音樂演出紀錄 · 直式節奏短影音" data-src="assets/video/music-daily.mp4">
+          <div class="thumb-wrapper thumb-portrait">
+            <span class="card-badge">直式 9:16 · 音樂短影音</span>
+            <img src="assets/video/music-daily-cover.png" alt="音樂與日常 Live Reel" class="thumb-image" loading="lazy">
+            <div class="play-badge" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><polygon points="6 4 20 12 6 20 6 4"></polygon></svg>
+            </div>
+          </div>
+          <div class="card-content">
+            <h2 class="card-title">音樂與日常 · Live Reel</h2>
+            <div class="card-subtitle">現場音樂演出紀錄 · 節奏短影音剪輯</div>
+            <p class="card-desc">
+              以底片膠卷顆粒質感與舞台強烈光影為視覺基底，精準捕捉音樂重音切換畫面節奏，將現場的心流律動與日常感知凝聚於直式短影音。
+            </p>
+            <ul class="card-meta-list">
+              <li class="card-meta-item">
+                <strong>負責項目</strong>
+                <span>現場動態捕捉 · 節奏剪輯 · 復古膠卷調色 · 字幕動效</span>
+              </li>
+              <li class="card-meta-item">
+                <strong>視覺特色</strong>
+                <span>底片邊框 · 音畫同步快慢切換 · 沉浸氛圍感</span>
+              </li>
+              <li class="card-meta-item">
+                <strong>規格格式</strong>
+                <span>1080×1920 (9:16) 直式短影音</span>
+              </li>
+            </ul>
+            <div class="card-action">
+              <span>點擊以直式畫框播放 ↗</span>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </section>
+
+    <!-- 底部跨頁導覽 -->
+    <nav class="page-nav">
+      <a href="graphic-design.html" class="page-nav-link prev">
+        <span class="page-nav-hint">← PREVIOUS CATEGORY</span>
+        <span class="page-nav-title">平面設計</span>
+      </a>
+      <a href="stranger.html" class="page-nav-link next">
+        <span class="page-nav-hint">NEXT CATEGORY →</span>
+        <span class="page-nav-title">網頁美編</span>
+      </a>
+    </nav>
+
+  </main>
+
+  <!-- 燈箱播放器 (Lightbox Modal) -->
+  <div id="video-modal" class="lightbox-modal" aria-hidden="true" role="dialog">
+    <div class="modal-container" id="modal-box">
+      
+      <div class="modal-header">
+        <div class="modal-title-box">
+          <h3 id="modal-title">影片標題</h3>
+          <p id="modal-subtitle">影片副標題</p>
+        </div>
+        <button class="modal-close-btn" id="modal-close-btn" aria-label="關閉播放器" title="關閉 (ESC)">×</button>
+      </div>
+
+      <div class="modal-media-body" id="modal-media-container">
+        <!-- 動態注入 iframe 或 video -->
+      </div>
+
+      <div class="modal-footer" id="modal-footer-box">
+        <span id="modal-extra-hint">支援鍵盤 ESC 鍵或點擊背景隨時關閉</span>
+        <span id="modal-source-link-wrap" style="display: none;">
+          <a id="modal-source-link" href="#" target="_blank" rel="noopener">前往農業知識入口網查看專題頁面 ↗</a>
+        </span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 頁尾 -->
+  <footer>
+    聯絡方式 <a href="mailto:spad9111@gmail.com">spad9111@gmail.com</a><br>
+    © 2026 郭佩綺 作品集。版權所有。
+  </footer>
+
+  <script>
+    // 1. 深色 / 淺色主題切換邏輯（預設深色模式）
+    const themeToggle = document.getElementById("theme-toggle");
+    const themeIcon = themeToggle ? themeToggle.querySelector(".theme-icon") : null;
+    const savedTheme = localStorage.getItem("peggy-portfolio-theme-v2") || "dark";
+
+    const setTheme = (theme) => {
+      if (theme === "dark") {
+        document.documentElement.setAttribute("data-theme", "dark");
+        if (themeIcon) themeIcon.textContent = "🌙";
+      } else {
+        document.documentElement.removeAttribute("data-theme");
+        if (themeIcon) themeIcon.textContent = "☀️";
+      }
+      localStorage.setItem("peggy-portfolio-theme-v2", theme);
+    };
+
+    setTheme(savedTheme);
+
+    if (themeToggle) {
+      themeToggle.addEventListener("click", () => {
+        const isDark = document.documentElement.getAttribute("data-theme") === "dark";
+        setTheme(isDark ? "light" : "dark");
+      });
+    }
+
+    // 2. 燈箱播放器 (Lightbox Modal) 互動
+    const modal = document.getElementById("video-modal");
+    const modalBox = document.getElementById("modal-box");
+    const modalTitle = document.getElementById("modal-title");
+    const modalSubtitle = document.getElementById("modal-subtitle");
+    const modalContainer = document.getElementById("modal-media-container");
+    const modalCloseBtn = document.getElementById("modal-close-btn");
+    const modalSourceLinkWrap = document.getElementById("modal-source-link-wrap");
+    const modalSourceLink = document.getElementById("modal-source-link");
+
+    const openModal = (card) => {
+      const type = card.getAttribute("data-type");
+      const title = card.getAttribute("data-title");
+      const subtitle = card.getAttribute("data-subtitle");
+      const src = card.getAttribute("data-src");
+      const sourceUrl = card.getAttribute("data-source-url");
+
+      modalTitle.textContent = title;
+      modalSubtitle.textContent = subtitle;
+
+      if (sourceUrl) {
+        modalSourceLink.href = sourceUrl;
+        modalSourceLinkWrap.style.display = "inline";
+      } else {
+        modalSourceLinkWrap.style.display = "none";
+      }
+
+      // 清空媒體容器
+      modalContainer.innerHTML = "";
+
+      if (type === "youtube") {
+        modalBox.classList.remove("is-vertical");
+        const iframe = document.createElement("iframe");
+        iframe.src = src;
+        iframe.title = title;
+        iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share";
+        iframe.allowFullscreen = true;
+        iframe.setAttribute("referrerpolicy", "strict-origin-when-cross-origin");
+        modalContainer.appendChild(iframe);
+      } else if (type === "native") {
+        modalBox.classList.add("is-vertical");
+        const video = document.createElement("video");
+        video.src = src;
+        video.controls = true;
+        video.autoplay = true;
+        video.playsInline = true;
+        video.loop = true;
+        modalContainer.appendChild(video);
+      }
+
+      modal.classList.add("is-open");
+      modal.setAttribute("aria-hidden", "false");
+      document.body.style.overflow = "hidden"; // 防止背景滾動
+    };
+
+    const closeModal = () => {
+      modal.classList.remove("is-open");
+      modal.setAttribute("aria-hidden", "true");
+      document.body.style.overflow = "";
+
+      // 暫停或銷毀媒體以防聲音背景繼續播
+      setTimeout(() => {
+        modalContainer.innerHTML = "";
+      }, 300);
+    };
+
+    // 綁定卡片點擊事件
+    document.querySelectorAll(".video-card").forEach(card => {
+      card.addEventListener("click", () => openModal(card));
+    });
+
+    // 關閉按鈕點擊
+    modalCloseBtn.addEventListener("click", closeModal);
+
+    // 點擊遮罩背景關閉
+    modal.addEventListener("click", (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // 鍵盤 ESC 關閉
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "Escape" && modal.classList.contains("is-open")) {
+        closeModal();
+      }
+    });
+  </script>
+</body>
+</html>
