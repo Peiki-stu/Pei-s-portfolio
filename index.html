@@ -8,25 +8,30 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500&family=Noto+Serif+TC:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
-      --bg: #f7f6f2;
-      --text: #1a1a1a;
-      --text-muted: #666;
-      --line: #ddd;
+      --bg: #fdfbf4;
+      --text: #2b2725;
+      --text-muted: #6b635e;
+      --line: rgba(150, 113, 85, 0.18);
       --accent: #967155;
-      --font-title: "Noto Serif TC", "Helvetica Neue", serif;
-      --font-body: "Noto Sans TC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+      --card-bg: rgba(150, 113, 85, 0.035);
+      --font-title: "Noto Serif TC", serif;
+      --font-body: "Noto Sans TC", sans-serif;
+      --font-mono: "Space Mono", monospace;
+      --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+      --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     [data-theme="dark"] {
       --bg: #12100e;
       --text: #f2ece4;
       --text-muted: #a39990;
-      --line: rgba(255, 255, 255, 0.15);
+      --line: rgba(217, 155, 100, 0.2);
       --accent: #d99b64;
+      --card-bg: rgba(217, 155, 100, 0.04);
     }
 
     /* 基礎設定 */
@@ -154,66 +159,231 @@
       color: var(--bg);
     }
 
-    /* 瀑布流專案網格區塊 (參考 yansu KIM 排版) */
+    /* 作品展示區塊 (Awwwards 規格雙欄錯落與流動排版) */
     .portfolio-section {
-      padding: 60px 40px 80px;
-      max-width: 1280px;
+      padding: 80px 40px 120px;
+      max-width: 1320px;
       margin: 0 auto;
       width: 100%;
       flex: 1;
     }
 
-    .section-title {
-      font-size: 13px;
-      color: var(--text-muted);
-      margin-bottom: 40px;
-      letter-spacing: 2px;
-      font-weight: 500;
-    }
-    
-    /* CSS Columns 瀑布流：完全依照原始比例縮放，不裁切 */
-    .masonry-container {
-      column-count: 2; /* 雙欄排列 */
-      column-gap: 40px; /* 欄位間距 */
-    }
-    
-    .project-card {
-      display: block;
-      margin-bottom: 60px; /* 上下卡片間距 */
-      break-inside: avoid; /* 避免單一卡片被切斷分到兩欄 */
-      transition: transform 0.3s ease;
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-bottom: 24px;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 60px;
     }
 
-    .project-card:hover {
-      transform: translateY(-5px);
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      letter-spacing: 3px;
+      color: var(--accent);
+      font-weight: 700;
+      text-transform: uppercase;
     }
-    
-    .project-image {
-      width: 100%;
-      height: auto; /* 解除高度限制，完全依照原始比例縮放 */
+
+    .section-counter {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+    }
+
+    /* 雙欄錯落排版 (Staggered 2-Column Grid) */
+    .works-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      column-gap: 56px;
+      align-items: start;
+    }
+
+    .works-col {
+      display: flex;
+      flex-direction: column;
+      gap: 72px;
+    }
+
+    /* 右欄垂直錯落位移：打破機械對齊，營造雜誌版面律動感 */
+    .works-col--right {
+      padding-top: 6rem;
+    }
+
+    /* 作品卡片：嚴格使用 GPU 硬體加速屬性 (transform, opacity) */
+    .project-card {
       display: block;
-      border-radius: 4px;
-      margin-bottom: 16px;
-      background-color: rgba(0, 0, 0, 0.03);
+      position: relative;
+      opacity: 0;
+      transform: translate3d(0, 48px, 0);
+      transition: opacity 0.85s cubic-bezier(0.16, 1, 0.3, 1),
+                  transform 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform, opacity;
     }
-    
-    .project-info h3 {
-      font-family: var(--font-title);
-      font-size: 20px;
-      margin: 0 0 6px 0;
+
+    /* 滾動浮現完成態 */
+    .project-card.is-revealed {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+
+    .card-inner {
+      display: block;
+      color: inherit;
+      outline: none;
+    }
+
+    .card-visual {
+      position: relative;
+      overflow: hidden;
+      border-radius: 8px;
+      border: 1px solid var(--line);
+      background-color: var(--card-bg);
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+      transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    }
+
+    [data-theme="dark"] .card-visual {
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.35);
+    }
+
+    .card-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      transform: scale(1.001);
+      transition: transform 0.75s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+
+    .card-badge-wrap {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      z-index: 2;
+    }
+
+    .card-tag {
+      font-family: var(--font-body);
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 1px;
+      padding: 5px 12px;
+      border-radius: 20px;
+      background: rgba(18, 16, 14, 0.76);
+      color: #f2ece4;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+    }
+
+    .card-overlay {
+      position: absolute;
+      bottom: 18px;
+      right: 18px;
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    .card-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 1px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      background: rgba(18, 16, 14, 0.85);
+      color: #f2ece4;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transform: translate3d(0, 10px, 0);
+      opacity: 0;
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  opacity 0.25s ease,
+                  background-color 0.25s ease;
+    }
+
+    /* 懸浮物理互動 (Hover Micro-interactions) */
+    .project-card:hover .card-visual {
+      border-color: var(--accent);
+      box-shadow: 0 16px 36px rgba(0, 0, 0, 0.12);
+    }
+
+    [data-theme="dark"] .project-card:hover .card-visual {
+      box-shadow: 0 18px 44px rgba(0, 0, 0, 0.55);
+    }
+
+    .project-card:hover .card-img {
+      transform: scale(1.036);
+    }
+
+    .project-card:hover .card-pill {
+      transform: translate3d(0, 0, 0);
+      opacity: 1;
+      background: var(--accent);
+      color: #fff;
+    }
+
+    .card-info {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .card-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+
+    .card-index {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--accent);
       letter-spacing: 1px;
     }
 
-    .project-info p {
+    .card-type {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      color: var(--text-muted);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+    }
+
+    .card-title {
+      font-family: var(--font-title);
+      font-size: 23px;
+      font-weight: 600;
+      margin: 0 0 6px 0;
+      letter-spacing: 0.8px;
+      color: var(--text);
+      transition: color 0.3s ease;
+    }
+
+    .project-card:hover .card-title {
+      color: var(--accent);
+    }
+
+    .card-desc {
       font-size: 14px;
       color: var(--text-muted);
       margin: 0;
-      letter-spacing: 0.5px;
+      line-height: 1.6;
+      letter-spacing: 0.3px;
     }
 
     /* 頁尾 */
     footer {
-      padding: 40px;
+      padding: 50px 40px;
       font-size: 14px;
       border-top: 1px solid var(--line);
       color: var(--text-muted);
@@ -221,7 +391,7 @@
       text-align: center;
     }
 
-    /* 響應式：手機版改為單欄 */
+    /* 響應式優化：手機版解構欄位以保持語意順序 */
     @media (max-width: 768px) {
       header {
         padding: 16px 20px;
@@ -237,14 +407,27 @@
         font-size: 26px;
       }
       .portfolio-section {
-        padding: 40px 20px 60px;
+        padding: 40px 20px 80px;
       }
-      .masonry-container {
-        column-count: 1;
-        column-gap: 0;
+      .section-header {
+        margin-bottom: 40px;
+      }
+      .works-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 48px;
+      }
+      .works-col {
+        display: contents; /* 解構欄位，子卡片依 order 排序 */
+      }
+      .works-col--right {
+        padding-top: 0;
       }
       .project-card {
-        margin-bottom: 40px;
+        order: var(--order, 0);
+      }
+      .card-title {
+        font-size: 20px;
       }
       footer {
         padding: 30px 20px;
@@ -287,59 +470,142 @@
   </div>
 </div>
 
-<div class="portfolio-section">
-  <div class="section-title">SELECTED WORKS</div>
+<section class="portfolio-section" id="works">
+  <div class="section-header">
+    <span class="section-label">SELECTED WORKS</span>
+    <span class="section-counter">05 ARCHIVED</span>
+  </div>
   
-  <!-- yansu KIM 瀑布流容器：保留原始比例無裁切 -->
-  <div class="masonry-container">
+  <!-- 雙欄錯落排版 (Staggered 2-Column Grid) -->
+  <div class="works-grid">
     
-    <!-- 專案 1：網頁美編 -->
-    <a href="stranger.html" class="project-card">
-      <img src="assets/web-mockup.jpg" alt="陌生益所 電商平台網頁美編" class="project-image" loading="lazy">
-      <div class="project-info">
-        <h3>陌生益所</h3>
-        <p>電商平台 · 網頁美編</p>
-      </div>
-    </a>
+    <!-- 左欄 (Left Column) -->
+    <div class="works-col works-col--left">
+      
+      <!-- 專案 01：網頁美編 -->
+      <article class="project-card" data-reveal style="--order: 1;">
+        <a href="stranger.html" class="card-inner" aria-label="查看 陌生益所 專案完整內容">
+          <div class="card-visual">
+            <img src="assets/web-mockup.jpg" alt="陌生益所 電商平台網頁美編" class="card-img" loading="lazy">
+            <div class="card-badge-wrap">
+              <span class="card-tag">網頁美編</span>
+            </div>
+            <div class="card-overlay" aria-hidden="true">
+              <span class="card-pill">View Project ↗</span>
+            </div>
+          </div>
+          <div class="card-info">
+            <div class="card-header-row">
+              <span class="card-index">01</span>
+              <span class="card-type">BRAND & E-COMMERCE</span>
+            </div>
+            <h3 class="card-title">陌生益所</h3>
+            <p class="card-desc">電商平台 · 視覺企劃與流程工具開發</p>
+          </div>
+        </a>
+      </article>
 
-    <!-- 專案 2：專題製作 -->
-    <a href="animal-teeth.html" class="project-card">
-      <img src="Capstone%20Project/web_assets/teeth.png" alt="咬牙切齒 資訊圖表與書籍設計" class="project-image" loading="lazy">
-      <div class="project-info">
-        <h3>咬牙切齒</h3>
-        <p>專題製作 · 資訊圖表與書籍設計</p>
-      </div>
-    </a>
+      <!-- 專案 03：影片剪輯 -->
+      <article class="project-card" data-reveal style="--order: 3;">
+        <a href="video.html" class="card-inner" aria-label="查看 國民水果「芭樂」特輯 專案完整內容">
+          <div class="card-visual">
+            <img src="assets/video/guava-cover.jpg" alt="國民水果「芭樂」特輯 影片剪輯與動畫" class="card-img" loading="lazy">
+            <div class="card-badge-wrap">
+              <span class="card-tag">影片剪輯</span>
+            </div>
+            <div class="card-overlay" aria-hidden="true">
+              <span class="card-pill">View Project ↗</span>
+            </div>
+          </div>
+          <div class="card-info">
+            <div class="card-header-row">
+              <span class="card-index">03</span>
+              <span class="card-type">MOTION & ANIMATION</span>
+            </div>
+            <h3 class="card-title">國民水果「芭樂」特輯</h3>
+            <p class="card-desc">農業知識科普動畫 · 官方數位收錄</p>
+          </div>
+        </a>
+      </article>
 
-    <!-- 專案 3：字體設計 -->
-    <a href="graphic-design.html#typography" class="project-card">
-      <img src="assets/graphic/ning-jing-cover.png" alt="凝境體 字體設計" class="project-image" loading="lazy">
-      <div class="project-info">
-        <h3>凝境體</h3>
-        <p>字體設計</p>
-      </div>
-    </a>
-    
-    <!-- 專案 4：平面設計 -->
-    <a href="graphic-design.html#packaging" class="project-card">
-      <img src="assets/graphic/pkg-02.webp" alt="祈福堂 · 五福發財糕 平面包裝設計" class="project-image" loading="lazy">
-      <div class="project-info">
-        <h3>祈福堂 · 五福發財糕</h3>
-        <p>平面設計 · 伴手禮盒包裝</p>
-      </div>
-    </a>
+    </div>
 
-    <!-- 專案 5：影片剪輯 -->
-    <a href="video.html" class="project-card">
-      <img src="assets/video/guava-cover.jpg" alt="國民水果「芭樂」特輯 影片剪輯與動畫" class="project-image" loading="lazy">
-      <div class="project-info">
-        <h3>國民水果「芭樂」特輯</h3>
-        <p>影片剪輯 · 農業知識科普動畫</p>
-      </div>
-    </a>
+    <!-- 右欄 (Right Column：錯落高低差，專題置頂於字體上方) -->
+    <div class="works-col works-col--right">
+
+      <!-- 專案 02：專題製作 (★ 關鍵排序：排在字體設計上方) -->
+      <article class="project-card" data-reveal style="--order: 2;">
+        <a href="animal-teeth.html" class="card-inner" aria-label="查看 咬牙切齒 專案完整內容">
+          <div class="card-visual">
+            <img src="Capstone%20Project/web_assets/teeth.png" alt="咬牙切齒 資訊圖表與書籍設計" class="card-img" loading="lazy">
+            <div class="card-badge-wrap">
+              <span class="card-tag">專題製作</span>
+            </div>
+            <div class="card-overlay" aria-hidden="true">
+              <span class="card-pill">View Project ↗</span>
+            </div>
+          </div>
+          <div class="card-info">
+            <div class="card-header-row">
+              <span class="card-index">02</span>
+              <span class="card-type">CAPSTONE & INFOGRAPHIC</span>
+            </div>
+            <h3 class="card-title">咬牙切齒</h3>
+            <p class="card-desc">專題製作 · 資訊圖表與書籍設計</p>
+          </div>
+        </a>
+      </article>
+
+      <!-- 專案 04：字體設計 (★ 位於專題製作下方) -->
+      <article class="project-card" data-reveal style="--order: 4;">
+        <a href="graphic-design.html#typography" class="card-inner" aria-label="查看 凝境體 專案完整內容">
+          <div class="card-visual">
+            <img src="assets/graphic/ning-jing-cover.png" alt="凝境體 字體設計" class="card-img" loading="lazy">
+            <div class="card-badge-wrap">
+              <span class="card-tag">字體設計</span>
+            </div>
+            <div class="card-overlay" aria-hidden="true">
+              <span class="card-pill">View Project ↗</span>
+            </div>
+          </div>
+          <div class="card-info">
+            <div class="card-header-row">
+              <span class="card-index">04</span>
+              <span class="card-type">TYPOGRAPHY DESIGN</span>
+            </div>
+            <h3 class="card-title">凝境體</h3>
+            <p class="card-desc">實驗字體設計 · 筆劃架構造字探索</p>
+          </div>
+        </a>
+      </article>
+      
+      <!-- 專案 05：平面設計 -->
+      <article class="project-card" data-reveal style="--order: 5;">
+        <a href="graphic-design.html#packaging" class="card-inner" aria-label="查看 祈福堂 · 五福發財糕 專案完整內容">
+          <div class="card-visual">
+            <img src="assets/graphic/pkg-02.webp" alt="祈福堂 · 五福發財糕 平面包裝設計" class="card-img" loading="lazy">
+            <div class="card-badge-wrap">
+              <span class="card-tag">平面設計</span>
+            </div>
+            <div class="card-overlay" aria-hidden="true">
+              <span class="card-pill">View Project ↗</span>
+            </div>
+          </div>
+          <div class="card-info">
+            <div class="card-header-row">
+              <span class="card-index">05</span>
+              <span class="card-type">PACKAGING & BRAND</span>
+            </div>
+            <h3 class="card-title">祈福堂 · 五福發財糕</h3>
+            <p class="card-desc">平面設計 · 伴手禮盒立體包裝</p>
+          </div>
+        </a>
+      </article>
+
+    </div>
 
   </div>
-</div>
+</section>
 
 <footer>
   聯絡方式 <a href="mailto:spad9111@gmail.com">spad9111@gmail.com</a><br>
@@ -347,7 +613,7 @@
 </footer>
 
 <script>
-  // 主題色彩切換邏輯（預設深色模式）
+  // 1. 主題色彩切換邏輯（預設深色模式）
   const themeToggle = document.getElementById("theme-toggle");
   const themeIcon = themeToggle ? themeToggle.querySelector(".theme-icon") : null;
 
@@ -372,6 +638,51 @@
       setTheme(nextTheme);
       localStorage.setItem("peggy-portfolio-theme-v2", nextTheme);
     });
+  }
+
+  // 2. 高效能零卡頓滾動浮現 (Scroll Reveal via IntersectionObserver)
+  const initScrollReveal = () => {
+    const revealCards = document.querySelectorAll(".project-card[data-reveal]");
+    if (!revealCards.length) return;
+
+    // 若使用者偏好減少動效，直接全部顯示
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      revealCards.forEach(card => card.classList.add("is-revealed"));
+      return;
+    }
+
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const card = entry.target;
+          card.classList.add("is-revealed");
+          // 進入畫面後立即解除監聽，釋放瀏覽器計算資源
+          obs.unobserve(card);
+
+          // 動畫結束後卸載 will-change 屬性，歸還 GPU 記憶體
+          card.addEventListener("transitionend", () => {
+            card.style.willChange = "auto";
+          }, { once: true });
+        }
+      });
+    }, {
+      root: null,
+      rootMargin: "0px 0px -50px 0px",
+      threshold: 0.1
+    });
+
+    revealCards.forEach((card, idx) => {
+      // 依序微延遲 (Staggered transition delay)
+      const delay = (idx % 2) * 0.12;
+      card.style.transitionDelay = `${delay}s`;
+      observer.observe(card);
+    });
+  };
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initScrollReveal);
+  } else {
+    initScrollReveal();
   }
 
   // 清除舊版視覺編輯器快取與舊版淺色設定
