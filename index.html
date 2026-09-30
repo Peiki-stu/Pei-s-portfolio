@@ -113,20 +113,61 @@
       transform: scale(1.2) rotate(15deg);
     }
 
-    /* 首頁自我介紹區塊 */
+    /* 首頁自我介紹區塊 (左側形象照 + 右側介紹) */
     .hero-section {
-      padding: 80px 40px;
+      padding: 85px 40px;
       border-bottom: 1px solid var(--line);
-      max-width: 1280px;
+      max-width: 1320px;
       margin: 0 auto;
       width: 100%;
+      display: flex;
+      align-items: center;
+      gap: 68px;
+    }
+
+    .hero-avatar-wrap {
+      flex: 0 0 330px;
+      max-width: 330px;
+      position: relative;
+    }
+
+    .hero-avatar-inner {
+      position: relative;
+      transition: transform 0.45s var(--ease-spring), filter 0.4s ease;
+      filter: drop-shadow(0 14px 28px rgba(0, 0, 0, 0.08));
+    }
+
+    [data-theme="dark"] .hero-avatar-inner {
+      filter: drop-shadow(0 20px 48px rgba(0, 0, 0, 0.55));
+    }
+
+    .hero-avatar-wrap:hover .hero-avatar-inner {
+      transform: translateY(-4px) scale(1.015);
+      filter: drop-shadow(0 20px 36px rgba(0, 0, 0, 0.14));
+    }
+
+    [data-theme="dark"] .hero-avatar-wrap:hover .hero-avatar-inner {
+      filter: drop-shadow(0 26px 56px rgba(0, 0, 0, 0.75));
+    }
+
+    .hero-avatar-img {
+      width: 100%;
+      height: auto;
+      display: block;
+      object-fit: contain;
+      user-select: none;
+    }
+
+    .hero-content {
+      flex: 1;
+      min-width: 0;
     }
 
     .hero-title {
       font-family: var(--font-title);
-      font-size: 32px;
+      font-size: 34px;
       font-weight: bold;
-      margin: 0 0 24px 0;
+      margin: 0 0 20px 0;
       letter-spacing: 2px;
     }
 
@@ -134,9 +175,9 @@
       font-size: 15px;
       line-height: 1.85;
       color: var(--text);
-      opacity: 0.9;
-      max-width: 750px;
-      margin-bottom: 32px;
+      opacity: 0.92;
+      max-width: 780px;
+      margin-bottom: 28px;
     }
 
     .hero-tags {
@@ -401,10 +442,19 @@
         font-size: 14px;
       }
       .hero-section {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 32px;
         padding: 50px 20px;
       }
+      .hero-avatar-wrap {
+        flex: none;
+        max-width: 240px;
+        width: 100%;
+        margin: 0;
+      }
       .hero-title {
-        font-size: 26px;
+        font-size: 28px;
       }
       .portfolio-section {
         padding: 40px 20px 80px;
@@ -452,23 +502,33 @@
   </nav>
 </header>
 
-<div class="hero-section">
-  <h1 class="hero-title">Hello, 我是 佩綺。</h1>
-  <p class="hero-description">
-    專注於視覺排版與資訊設計。<br>
-    擅長將複雜資訊轉化為易讀的視覺介面，曾執行平面書籍到數位電商品牌。<br><br>
-    <strong>設計軟體：</strong>Illustrator · Photoshop · InDesign · Procreate · Canva<br>
-    <strong>AI協作工具：</strong>Google Antigravity, Cursor, Gemini, Chat gpt<br>
-    <strong>前端網頁基礎：</strong>RWD 響應式網頁設計, HTML/CSS
-  </p>
-  <div class="hero-tags">
-    <span class="tag">#品牌視覺網頁</span>
-    <span class="tag">#社群圖文設計</span>
-    <span class="tag">#書籍排版設計</span>
-    <span class="tag">#字體設計</span>
-    <span class="tag">#影片剪輯</span>
+<section class="hero-section">
+  <!-- 左側：個人形象照片 (緊鄰文字左側) -->
+  <div class="hero-avatar-wrap">
+    <div class="hero-avatar-inner">
+      <img src="assets/PeiPhoto.png" alt="郭佩綺 Peggy Kuo" class="hero-avatar-img" width="330" height="313" fetchpriority="high">
+    </div>
   </div>
-</div>
+
+  <!-- 右側：自我介紹文字 -->
+  <div class="hero-content">
+    <h1 class="hero-title">Hello, 我是 佩綺。</h1>
+    <p class="hero-description">
+      專注於視覺排版與資訊設計。<br>
+      擅長將複雜資訊轉化為易讀的視覺介面，曾執行平面書籍到數位電商品牌。<br><br>
+      <strong>設計軟體：</strong>Illustrator · Photoshop · InDesign · Procreate · Canva<br>
+      <strong>AI協作工具：</strong>Google Antigravity, Cursor, Gemini, Chat gpt<br>
+      <strong>前端網頁基礎：</strong>RWD 響應式網頁設計, HTML/CSS
+    </p>
+    <div class="hero-tags">
+      <span class="tag">#品牌視覺網頁</span>
+      <span class="tag">#社群圖文設計</span>
+      <span class="tag">#書籍排版設計</span>
+      <span class="tag">#字體設計</span>
+      <span class="tag">#影片剪輯</span>
+    </div>
+  </div>
+</section>
 
 <section class="portfolio-section" id="works">
   <div class="section-header">
