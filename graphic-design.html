@@ -463,10 +463,416 @@
       display: block;
       width: 100%;
     }
+    #presentation-section,
+    #poster-section,
     #packaging-section,
     #photography-section {
       display: none;
       width: 100%;
+    }
+
+    /* =========================================================
+       簡報排版 (Presentation Deck Player & Highlights Grid)
+       ========================================================= */
+    .deck-player-container {
+      margin-bottom: 5.5rem;
+      border: 1px solid var(--line);
+      background: var(--card-bg);
+      padding: 1.5rem;
+      position: relative;
+    }
+
+    .deck-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--line);
+      margin-bottom: 1.25rem;
+    }
+
+    .deck-meta-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .deck-slide-title {
+      font-size: 0.88rem;
+      color: var(--text);
+      letter-spacing: 0.5px;
+      font-weight: 500;
+    }
+
+    .deck-controls {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .deck-btn {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      color: var(--text);
+      padding: 6px 14px;
+      font-size: 0.82rem;
+      font-family: var(--font-mono);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border-radius: 4px;
+      transition: transform 0.2s var(--ease-spring), border-color 0.2s ease, color 0.2s ease, background-color 0.2s ease;
+    }
+
+    .deck-btn:hover:not(:disabled) {
+      border-color: var(--accent);
+      color: var(--accent);
+      transform: translateY(-1px);
+    }
+
+    .deck-btn:active:not(:disabled) {
+      transform: translateY(0);
+    }
+
+    .deck-btn:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
+
+    .deck-counter-badge {
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      padding: 0 6px;
+      letter-spacing: 1px;
+    }
+
+    .deck-screen-wrap {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      max-height: 640px;
+      background: #000;
+      border: 1px solid var(--line);
+      position: relative;
+      cursor: pointer;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .deck-screen-img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+      transition: opacity 0.2s ease;
+    }
+
+    .deck-screen-overlay-hint {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      background: rgba(18, 16, 14, 0.78);
+      color: #f2ece4;
+      font-size: 0.72rem;
+      font-family: var(--font-mono);
+      padding: 4px 10px;
+      border-radius: 20px;
+      letter-spacing: 1px;
+      opacity: 0;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      transition: opacity 0.25s ease, transform 0.25s var(--ease-spring);
+      pointer-events: none;
+    }
+
+    .deck-screen-wrap:hover .deck-screen-overlay-hint {
+      opacity: 1;
+      transform: translateY(-2px);
+    }
+
+    /* 縮圖滾動軌道 */
+    .deck-thumbs-scroll-wrap {
+      margin-top: 1.25rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--line);
+      position: relative;
+    }
+
+    .deck-thumbs-track {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding: 4px 2px 10px;
+      scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .deck-thumbs-track::-webkit-scrollbar {
+      height: 6px;
+    }
+    .deck-thumbs-track::-webkit-scrollbar-track {
+      background: var(--card-bg);
+      border-radius: 3px;
+    }
+    .deck-thumbs-track::-webkit-scrollbar-thumb {
+      background: var(--line-strong);
+      border-radius: 3px;
+    }
+
+    .deck-thumb-item {
+      flex: 0 0 100px;
+      aspect-ratio: 4 / 3;
+      border: 1px solid var(--line);
+      background: var(--bg);
+      cursor: pointer;
+      padding: 0;
+      position: relative;
+      overflow: hidden;
+      border-radius: 2px;
+      transition: border-color 0.2s ease, transform 0.2s var(--ease-spring);
+    }
+
+    .deck-thumb-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .deck-thumb-item .thumb-num {
+      position: absolute;
+      bottom: 2px;
+      right: 4px;
+      font-family: var(--font-mono);
+      font-size: 0.6rem;
+      background: rgba(0, 0, 0, 0.7);
+      color: #fff;
+      padding: 1px 4px;
+      border-radius: 2px;
+      letter-spacing: 0.5px;
+    }
+
+    .deck-thumb-item:hover {
+      border-color: var(--text);
+      transform: translateY(-2px);
+    }
+
+    .deck-thumb-item.active {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 2px var(--accent);
+    }
+
+    /* 精選投影片解析網格 */
+    .deck-highlights-section {
+      margin-top: 2.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--line);
+    }
+
+    .deck-highlights-title {
+      font-family: var(--font-title);
+      font-size: 1.15rem;
+      color: var(--text);
+      letter-spacing: 1.5px;
+      margin-bottom: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .deck-highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .deck-highlights-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    @media (max-width: 580px) {
+      .deck-highlights-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .highlight-card {
+      background: var(--bg);
+      border: 1px solid var(--line);
+      padding: 0.85rem;
+      display: flex;
+      flex-direction: column;
+      cursor: pointer;
+      transition: border-color 0.2s ease, transform 0.25s var(--ease-spring);
+    }
+
+    .highlight-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-3px);
+    }
+
+    .highlight-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      padding-bottom: 0.4rem;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .highlight-card-img-wrap {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      background: var(--card-bg);
+      overflow: hidden;
+      margin-bottom: 0.65rem;
+    }
+
+    .highlight-card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.3s ease;
+    }
+
+    .highlight-card:hover .highlight-card-img-wrap img {
+      transform: scale(1.03);
+    }
+
+    .highlight-card-desc {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      line-height: 1.5;
+      letter-spacing: 0.5px;
+    }
+
+    /* =========================================================
+       視覺海報 (Poster Design & Artwork Exhibition)
+       ========================================================= */
+    .poster-exhibition-grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 36px;
+      align-items: start;
+    }
+
+    .poster-art-column {
+      grid-column: 1 / span 7;
+    }
+
+    .poster-info-column {
+      grid-column: 8 / span 5;
+      display: flex;
+      flex-direction: column;
+      gap: 1.8rem;
+    }
+
+    @media (max-width: 900px) {
+      .poster-art-column {
+        grid-column: 1 / span 12;
+      }
+      .poster-info-column {
+        grid-column: 1 / span 12;
+      }
+    }
+
+    .poster-art-frame {
+      border: 1px solid var(--line);
+      background: var(--bg);
+      padding: 12px;
+      cursor: pointer;
+      position: relative;
+      transition: border-color 0.25s ease, transform 0.35s var(--ease-spring);
+    }
+
+    .poster-art-frame:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+    }
+
+    .poster-art-frame img {
+      width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    .poster-concept-card {
+      border: 1px solid var(--line);
+      background: var(--card-bg);
+      padding: 1.5rem;
+    }
+
+    .poster-concept-title {
+      font-family: var(--font-title);
+      font-size: 1.25rem;
+      color: var(--text);
+      letter-spacing: 1px;
+      margin-bottom: 0.8rem;
+    }
+
+    .poster-concept-text {
+      font-size: 0.88rem;
+      line-height: 1.8;
+      color: var(--text);
+      opacity: 0.9;
+      letter-spacing: 0.5px;
+    }
+
+    /* 色彩晶片調色盤 */
+    .palette-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 1rem;
+    }
+
+    .palette-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.82rem;
+      font-family: var(--font-mono);
+      color: var(--text);
+    }
+
+    .color-chip {
+      width: 28px;
+      height: 28px;
+      border-radius: 4px;
+      border: 1px solid rgba(0, 0, 0, 0.15);
+      flex-shrink: 0;
+    }
+
+    .specs-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.82rem;
+      margin-top: 0.8rem;
+    }
+
+    .specs-table td {
+      padding: 8px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .specs-label {
+      color: var(--text-muted);
+      font-family: var(--font-mono);
+      width: 90px;
+    }
+
+    .specs-val {
+      color: var(--text);
+      font-weight: 500;
     }
 
     /* 十字對齊準星 (Crosshairs) */
@@ -916,14 +1322,16 @@
       <h1 class="page-title">平面設計</h1>
       <div class="tools-tag">
         <span class="tools-label">使用工具</span>
-        <span class="tools-items">Illustrator · Photoshop · InDesign · Procreate · Canva</span>
+        <span class="tools-items">Illustrator · Photoshop · InDesign · Procreate · Canva · Keynote</span>
       </div>
     </div>
 
-    <!-- 黏性分類選單（字體設計、包裝設計、日常攝影） -->
+    <!-- 黏性分類選單（字體設計、簡報排版、視覺海報、包裝設計、日常攝影） -->
     <nav class="filter-sticky-wrapper" aria-label="作品分類篩選">
       <div class="filter-container">
         <button class="filter-btn active" data-filter="typography">字體設計 <span class="filter-en">TYPOGRAPHY</span></button>
+        <button class="filter-btn" data-filter="presentation">簡報排版 <span class="filter-en">PRESENTATION</span></button>
+        <button class="filter-btn" data-filter="poster">視覺海報 <span class="filter-en">POSTER DESIGN</span></button>
         <button class="filter-btn" data-filter="packaging">包裝設計 <span class="filter-en">PACKAGING</span></button>
         <button class="filter-btn" data-filter="photography">日常攝影 <span class="filter-en">PHOTOGRAPHY</span></button>
       </div>
@@ -1061,7 +1469,398 @@
       </div>
 
       <!-- ========================================================
-           分類二：包裝設計 (PACKAGING)
+           分類二：簡報排版 (PRESENTATION)
+           - 專案一：芙烈達·卡蘿 藝術家生平與自畫像分析 (29 頁完整簡報)
+           - 專案二：IF OFFICE 馮宇 品牌規劃與書籍裝幀專題報告 (24 頁完整簡報)
+           - 包含互動式投影片翻頁預覽器、橫向縮圖索引、精選重點投影片網格
+           ======================================================== -->
+      <div id="presentation-section" class="category-section">
+
+        <!-- 專案 01：芙烈達·卡蘿 視覺研究期中報告 -->
+        <section class="zine-project-unit reveal-on-scroll">
+          <div class="zine-project-header">
+            <div class="zine-meta">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.4rem;">
+                <span class="stamp-badge">EDITORIAL &amp; PRESENTATION</span>
+                <span class="font-decor" style="font-size: 0.65rem; color: var(--accent);">29 SLIDES · KEYNOTE</span>
+              </div>
+              <h2 class="zine-title">芙烈達·卡蘿 · 藝術家生平與各時期自畫像分析</h2>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin-top: 0.5rem; max-width: 980px;">
+                本專題以墨西哥傳奇藝術家芙烈達·卡蘿（Frida Kahlo）為研究對象，透過清晰的歷史時間軸、身心狀態轉折，深度剖析其早期、中期至晚期的自畫像語彙與象徵隱喻。排版設計著重於嚴謹的版型骨架、沈穩色彩系統與高易讀性的圖文節奏，將龐大的藝術史資訊轉化為結構清晰、層次分明的視覺簡報。
+              </p>
+            </div>
+          </div>
+
+          <!-- 互動式簡報播放器 (Frida Deck) -->
+          <div class="deck-player-container" id="player-frida" data-deck-id="frida" data-total="29">
+            <div class="deck-top-bar">
+              <div class="deck-meta-info">
+                <span class="stamp-badge">INTERACTIVE VIEWER</span>
+                <span class="deck-slide-title font-decor" id="deck-frida-title">01 / 29 · 簡報封面 · 視覺研究期中報告</span>
+              </div>
+              <div class="deck-controls">
+                <button class="deck-btn deck-prev" id="deck-frida-prev" aria-label="上一頁" title="上一頁 (←)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  上一頁
+                </button>
+                <span class="deck-counter-badge"><span id="deck-frida-cur">01</span> / <span id="deck-frida-tot">29</span></span>
+                <button class="deck-btn deck-next" id="deck-frida-next" aria-label="下一頁" title="下一頁 (→)">
+                  下一頁
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+                <button class="deck-btn deck-fullscreen" id="deck-frida-fs" aria-label="燈箱全螢幕預覽" title="點擊放大檢視">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                  放大
+                </button>
+              </div>
+            </div>
+
+            <!-- 主畫面展示區 (4:3 比例，點擊可開啟燈箱) -->
+            <div class="deck-screen-wrap zine-card" id="deck-frida-screen" data-title="芙烈達·卡蘿 視覺研究期中報告 - Slide 01">
+              <img src="assets/graphic/presentation/frida/frida-01.webp" alt="芙烈達·卡蘿 視覺研究期中報告" id="deck-frida-img" class="deck-screen-img">
+              <div class="deck-screen-overlay-hint">點擊放大檢視 ↗</div>
+            </div>
+
+            <!-- 橫向縮圖導覽列 -->
+            <div class="deck-thumbs-scroll-wrap">
+              <div class="deck-thumbs-track" id="deck-frida-thumbs" role="tablist" aria-label="投影片縮圖導覽">
+                <!-- 由 JavaScript 動態生成 29 張完整縮圖並支援鍵盤與觸控跳頁 -->
+              </div>
+            </div>
+
+            <!-- 精選亮點投影片網格 -->
+            <div class="deck-highlights-section">
+              <h3 class="deck-highlights-title font-decor">
+                <span>✦</span> 精選核心投影片解析 (KEY HIGHLIGHTS)
+              </h3>
+              <div class="deck-highlights-grid">
+
+                <div class="highlight-card zine-card" data-title="芙烈達·卡蘿 簡報封面 · 視覺研究期中報告">
+                  <div class="highlight-card-header">
+                    <span class="stamp-badge">SLIDE 01</span>
+                    <span class="font-decor" style="font-size: 0.62rem; color: var(--text-muted);">COVER</span>
+                  </div>
+                  <div class="highlight-card-img-wrap">
+                    <img src="assets/graphic/presentation/frida/frida-01.webp" alt="簡報封面 · 芙烈達·卡蘿" loading="lazy">
+                  </div>
+                  <p class="highlight-card-desc"><strong>簡報主視覺封面：</strong>沈穩內斂的版面構圖，以強烈對比字體建立藝術家主題張力與視覺焦點。</p>
+                </div>
+
+                <div class="highlight-card zine-card" data-title="芙烈達·卡蘿 章節目錄 · 六大研究主題索引">
+                  <div class="highlight-card-header">
+                    <span class="stamp-badge">SLIDE 02</span>
+                    <span class="font-decor" style="font-size: 0.62rem; color: var(--text-muted);">CONTENTS</span>
+                  </div>
+                  <div class="highlight-card-img-wrap">
+                    <img src="assets/graphic/presentation/frida/frida-02.webp" alt="章節目錄 · 芙烈達·卡蘿" loading="lazy">
+                  </div>
+                  <p class="highlight-card-desc"><strong>目錄索引排版：</strong>清晰明瞭的六大主題結構，結合底圖質感層次，建立流暢的研究路徑指引。</p>
+                </div>
+
+                <div class="highlight-card zine-card" data-title="芙烈達·卡蘿 生平事蹟 · 車禍重大轉折與創作起點">
+                  <div class="highlight-card-header">
+                    <span class="stamp-badge">SLIDE 04</span>
+                    <span class="font-decor" style="font-size: 0.62rem; color: var(--text-muted);">BIOGRAPHY</span>
+                  </div>
+                  <div class="highlight-card-img-wrap">
+                    <img src="assets/graphic/presentation/frida/frida-04.webp" alt="生平轉折與自畫像" loading="lazy">
+                  </div>
+                  <p class="highlight-card-desc"><strong>生平轉折與歷程：</strong>左文右圖經典版型，梳理 18 歲車禍重傷到拿起畫筆直視自我的救贖歷程。</p>
+                </div>
+
+                <div class="highlight-card zine-card" data-title="芙烈達·卡蘿 早期自畫像分析 (1926-1935)">
+                  <div class="highlight-card-header">
+                    <span class="stamp-badge">SLIDE 12</span>
+                    <span class="font-decor" style="font-size: 0.62rem; color: var(--text-muted);">PERIOD I</span>
+                  </div>
+                  <div class="highlight-card-img-wrap">
+                    <img src="assets/graphic/presentation/frida/frida-12.webp" alt="早期自畫像分析" loading="lazy">
+                  </div>
+                  <p class="highlight-card-desc"><strong>時期過渡章節頁：</strong>以大字號時間軸切分時期，聚焦墨西哥民族文化認同與早期自我意識探索。</p>
+                </div>
+
+                <div class="highlight-card zine-card" data-title="芙烈達·卡蘿 經典畫作分析 ·《兩個芙烈達》(1939)">
+                  <div class="highlight-card-header">
+                    <span class="stamp-badge">SLIDE 19</span>
+                    <span class="font-decor" style="font-size: 0.62rem; color: var(--text-muted);">ANALYSIS</span>
+                  </div>
+                  <div class="highlight-card-img-wrap">
+                    <img src="assets/graphic/presentation/frida/frida-19.webp" alt="兩個芙烈達畫作分析" loading="lazy">
+                  </div>
+                  <p class="highlight-card-desc"><strong>作品深度剖析：</strong>畫作大圖沉浸展示，詳列創作年代、尺寸媒材與雙重人格的心靈糾葛隱喻。</p>
+                </div>
+
+                <div class="highlight-card zine-card" data-title="芙烈達·卡蘿 總結心得 ·《生命萬歲 Viva la vida》">
+                  <div class="highlight-card-header">
+                    <span class="stamp-badge">SLIDE 29</span>
+                    <span class="font-decor" style="font-size: 0.62rem; color: var(--text-muted);">CONCLUSION</span>
+                  </div>
+                  <div class="highlight-card-img-wrap">
+                    <img src="assets/graphic/presentation/frida/frida-29.webp" alt="生命萬歲 總結心得" loading="lazy">
+                  </div>
+                  <p class="highlight-card-desc"><strong>結語溫柔呼告：</strong>收錄藝術家離世前最後畫作《生命萬歲》，以詩意排版為報告畫下深刻句點。</p>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- 專案 02：IF OFFICE 馮宇 品牌規劃與書籍裝幀專題報告 -->
+        <section class="zine-project-unit reveal-on-scroll">
+          <div class="zine-project-header">
+            <div class="zine-meta">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.4rem;">
+                <span class="stamp-badge">BRANDING &amp; EDITORIAL</span>
+                <span class="font-decor" style="font-size: 0.65rem; color: var(--accent);">24 SLIDES · KEYNOTE</span>
+              </div>
+              <h2 class="zine-title">IF OFFICE 馮宇 · 品牌規劃與書籍裝幀設計專題報告</h2>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin-top: 0.5rem; max-width: 980px;">
+                本報告針對台灣知名設計公司「IF OFFICE」創辦人馮宇的代表案例進行全面梳理。內容橫跨美感教科書裝幀（美感細胞《小五國語》造字封面、教科圖書設計金獎《米米的好朋友》）、《好吃》雜誌食材排版美學、嘉義市城市品牌與「嘉市體」標準字型、TPASS 通勤月票、Hahow 好學校識別，以及線上課程設計思維。排版以嚴謹的網格對齊、豐富案例圖解與清晰架構展現專業簡報風貌。
+              </p>
+            </div>
+          </div>
+
+          <!-- 互動式簡報播放器 (Feng Deck) -->
+          <div class="deck-player-container" id="player-feng" data-deck-id="feng" data-total="24">
+            <div class="deck-top-bar">
+              <div class="deck-meta-info">
+                <span class="stamp-badge">INTERACTIVE VIEWER</span>
+                <span class="deck-slide-title font-decor" id="deck-feng-title">01 / 24 · 簡報封面 · IF OFFICE 翼翼有限公司</span>
+              </div>
+              <div class="deck-controls">
+                <button class="deck-btn deck-prev" id="deck-feng-prev" aria-label="上一頁" title="上一頁 (←)">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 18 9 12 15 6"></polyline></svg>
+                  上一頁
+                </button>
+                <span class="deck-counter-badge"><span id="deck-feng-cur">01</span> / <span id="deck-feng-tot">24</span></span>
+                <button class="deck-btn deck-next" id="deck-feng-next" aria-label="下一頁" title="下一頁 (→)">
+                  下一頁
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                </button>
+                <button class="deck-btn deck-fullscreen" id="deck-feng-fs" aria-label="燈箱全螢幕預覽" title="點擊放大檢視">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="15 3 21 3 21 9"></polyline><polyline points="9 21 3 21 3 15"></polyline><line x1="21" y1="3" x2="14" y2="10"></line><line x1="3" y1="21" x2="10" y2="14"></line></svg>
+                  放大
+                </button>
+              </div>
+            </div>
+
+            <!-- 主畫面展示區 (4:3 比例，點擊可開啟燈箱) -->
+            <div class="deck-screen-wrap zine-card" id="deck-feng-screen" data-title="IF OFFICE 馮宇 品牌與書籍設計報告 - Slide 01">
+              <img src="assets/graphic/presentation/feng/feng-01.webp" alt="IF OFFICE 馮宇 品牌與書籍設計報告" id="deck-feng-img" class="deck-screen-img">
+              <div class="deck-screen-overlay-hint">點擊放大檢視 ↗</div>
+            </div>
+
+            <!-- 橫向縮圖導覽列 -->
+            <div class="deck-thumbs-scroll-wrap">
+              <div class="deck-thumbs-track" id="deck-feng-thumbs" role="tablist" aria-label="投影片縮圖導覽">
+                <!-- 由 JavaScript 動態生成 24 張完整縮圖並支援鍵盤與觸控跳頁 -->
+              </div>
+            </div>
+
+            <!-- 精選亮點投影片網格 -->
+            <div class="deck-highlights-section">
+              <h3 class="deck-highlights-title font-decor">
+                <span>✦</span> 精選核心投影片解析 (KEY HIGHLIGHTS)
+              </h3>
+              <div class="deck-highlights-grid">
+
+                <div class="highlight-card zine-card" data-title="IF OFFICE 馮宇 簡報封面 · 品牌規劃與服務客戶群">
+                  <div class="highlight-card-header">
+                    <span class="stamp-badge">SLIDE 01</span>
+                    <span class="font-decor" style="font-size: 0.62rem; color: var(--text-muted);">COVER</span>
+                  </div>
+                  <div class="highlight-card-img-wrap">
+                    <img src="assets/graphic/presentation/feng/feng-01.webp" alt="IF OFFICE 簡報封面" loading="lazy">
+                  </div>
+                  <p class="highlight-card-desc"><strong>簡報主視覺封面：</strong>清晰彙整 IF OFFICE 品牌定位、全方位設計範疇與涵蓋國內外各大知名企業的服務版圖。</p>
+                </div>
+
+                <div class="highlight-card zine-card" data-title="美感細胞《小五國語》六書造字互動封面設計">
+                  <div class="highlight-card-header">
+                    <span class="stamp-badge">SLIDE 03</span>
+                    <span class="font-decor" style="font-size: 0.62rem; color: var(--text-muted);">BOOK DESIGN</span>
+                  </div>
+                  <div class="highlight-card-img-wrap">
+                    <img src="assets/graphic/presentation/feng/feng-03.webp" alt="美感細胞 小五國語封面設計" loading="lazy">
+                  </div>
+                  <p class="highlight-card-desc"><strong>書籍裝幀突破：</strong>融合六書造字部件互動遊戲與書籤摺口實用設計，大幅提升教學現場便利性。</p>
+                </div>
+
+                <div class="highlight-card zine-card" data-title="教科圖書設計獎金獎 ·《米米的好朋友》書中書概念">
+                  <div class="highlight-card-header">
+                    <span class="stamp-badge">SLIDE 05</span>
+                    <span class="font-decor" style="font-size: 0.62rem; color: var(--text-muted);">AWARD WORK</span>
+                  </div>
+                  <div class="highlight-card-img-wrap">
+                    <img src="assets/graphic/presentation/feng/feng-05.webp" alt="米米的好朋友 教科圖書設計獎" loading="lazy">
+                  </div>
+                  <p class="highlight-card-desc"><strong>符號魔法故事書：</strong>以創新「書中書」架構打破傳統課本死板編排，創造友善歡樂的注音符號學習體驗。</p>
+                </div>
+
+                <div class="highlight-card zine-card" data-title="《好吃》雜誌 · 食材攝影與文字排版美學">
+                  <div class="highlight-card-header">
+                    <span class="stamp-badge">SLIDE 06</span>
+                    <span class="font-decor" style="font-size: 0.62rem; color: var(--text-muted);">EDITORIAL</span>
+                  </div>
+                  <div class="highlight-card-img-wrap">
+                    <img src="assets/graphic/presentation/feng/feng-06.webp" alt="好吃雜誌 食材排版美學" loading="lazy">
+                  </div>
+                  <p class="highlight-card-desc"><strong>飲食生活誌排版：</strong>精緻食材攝影與輕盈文字版面呼應，從咖啡、甜點到粗食主義，探討食物生活哲思。</p>
+                </div>
+
+                <div class="highlight-card zine-card" data-title="嘉義市全新城市形象 · 首創城市標準字型「嘉市體」">
+                  <div class="highlight-card-header">
+                    <span class="stamp-badge">SLIDE 11</span>
+                    <span class="font-decor" style="font-size: 0.62rem; color: var(--text-muted);">CITY BRANDING</span>
+                  </div>
+                  <div class="highlight-card-img-wrap">
+                    <img src="assets/graphic/presentation/feng/feng-11.webp" alt="嘉義市城市形象設計" loading="lazy">
+                  </div>
+                  <p class="highlight-card-desc"><strong>城市品牌規劃：</strong>與 justfont 聯手打造全台首座城市專屬標準字體「嘉市體」，展現親切溫暖的成熟韻味。</p>
+                </div>
+
+                <div class="highlight-card zine-card" data-title="Hahow 好學校 ·「拆解知識之門」品牌宇宙">
+                  <div class="highlight-card-header">
+                    <span class="stamp-badge">SLIDE 15</span>
+                    <span class="font-decor" style="font-size: 0.62rem; color: var(--text-muted);">DIGITAL BRAND</span>
+                  </div>
+                  <div class="highlight-card-img-wrap">
+                    <img src="assets/graphic/presentation/feng/feng-15.webp" alt="Hahow 好學校品牌識別" loading="lazy">
+                  </div>
+                  <p class="highlight-card-desc"><strong>多元教育品牌識別：</strong>拆解首字母「h」轉化為對應知識之門，透過不同色系展現跨領域學習的多元包容。</p>
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ========================================================
+           分類三：視覺海報 (POSTER DESIGN)
+           - 專案：超現實意識流 · 數位拼貼海報《思緒潮汐》
+           - 展覽級畫框陳列、作品理念、視覺符號解構、色彩晶片提取與規格
+           ======================================================== -->
+      <div id="poster-section" class="category-section">
+
+        <section class="zine-project-unit reveal-on-scroll">
+          <div class="zine-project-header">
+            <div class="zine-meta">
+              <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 0.4rem;">
+                <span class="stamp-badge">DIGITAL COLLAGE · 2026 POSTER ART</span>
+                <span class="font-decor" style="font-size: 0.65rem; color: var(--accent);">FINE ART PRINT · 1413 × 2000 PX</span>
+              </div>
+              <h2 class="zine-title">超現實意識流 · 數位拼貼海報《思緒潮汐》</h2>
+              <p style="font-size: 0.88rem; color: var(--text-muted); line-height: 1.7; margin-top: 0.5rem; max-width: 980px;">
+                本件海報創作以「潛意識流動與記憶切片」為核心命題，運用當代數位拼貼與超現實解構技法。以沈靜的灰階素描人體剖面為地基，引流奔騰蔚藍的海浪與追浪孩童；突破常規物理邏輯的黃金奇異果長頸鹿、漂浮天青馬卡龍、雛菊草地翻滾的貓咪與雨中持傘獨行的白裙背影，在有機的手撕紙邊界中碰撞重組，展現夢境、純真童年與潛意識心靈交會的強烈張力。
+              </p>
+            </div>
+          </div>
+
+          <!-- 海報展覽雙欄佈局 (左大圖 + 右解構理念) -->
+          <div class="poster-exhibition-grid">
+
+            <!-- 左側：海報畫框展示 (支援點擊燈箱高解析放大) -->
+            <div class="poster-art-column">
+              <div class="poster-art-frame zine-card" data-title="超現實意識流 · 數位拼貼海報《思緒潮汐》 (1413 × 2000 px)">
+                <img src="assets/graphic/poster/poster-surreal-collage.webp" alt="超現實意識流 · 數位拼貼海報《思緒潮汐》" loading="lazy">
+                <div class="deck-screen-overlay-hint" style="opacity: 1;">點擊放大檢視 ↗</div>
+              </div>
+            </div>
+
+            <!-- 右側：創作理念、視覺符號與調色盤 -->
+            <div class="poster-info-column">
+
+              <!-- 理念卡片 -->
+              <div class="poster-concept-card">
+                <h3 class="poster-concept-title">創作理念與視覺構思</h3>
+                <p class="poster-concept-text">
+                  「大腦不是封閉的容器，而是容納萬象與情緒的海潮。」<br><br>
+                  創作者透過大膽的<strong>撕紙觸感質地（Torn Paper Edge）</strong>打破維度屏障，將嚴肅冷靜的黑白人物肖像撕開一角，釋放出記憶深處澎湃的蔚藍海浪。
+                  在畫面右上角，長頸鹿的身軀被幾何解構成切片奇異果，與漂浮於空中的藍色馬卡龍形成荒誕而詩意的呼應；前景的雛菊與玩耍貓咪則拉回日常溫暖，形塑出冷暖交織、虛實相生的超現實視覺語境。
+                </p>
+              </div>
+
+              <!-- 視覺符號解構 -->
+              <div class="poster-concept-card">
+                <h4 class="font-decor" style="font-size: 0.95rem; color: var(--text); letter-spacing: 1px; margin-bottom: 0.75rem;">
+                  ✦ 核心視覺符號轉譯
+                </h4>
+                <ul style="font-size: 0.85rem; color: var(--text-muted); line-height: 1.8; padding-left: 1.2rem; display: flex; flex-direction: column; gap: 6px;">
+                  <li><strong>腦海浪潮與奔逐孩童：</strong>象徵潛意識情感湧動與深層純真的童年記憶。</li>
+                  <li><strong>黃金奇異果長頸鹿：</strong>突破生物常態界線，以水果幾何切片賦予超現實趣味。</li>
+                  <li><strong>天青色馬卡龍：</strong>輕盈懸浮於畫面高處，作為視覺色彩對位的甜美錨點。</li>
+                  <li><strong>雨傘白裙背影：</strong>在超現實夢境邊陲保留一份獨自漫步的孤寂與沈思。</li>
+                  <li><strong>有機手撕紙紋理：</strong>凸顯手工剪貼與實體拼貼的立體物理層次感。</li>
+                </ul>
+              </div>
+
+              <!-- 色彩提取晶片 -->
+              <div class="poster-concept-card">
+                <h4 class="font-decor" style="font-size: 0.95rem; color: var(--text); letter-spacing: 1px; margin-bottom: 0.5rem;">
+                  ✦ 色彩意象提取 (COLOR PALETTE)
+                </h4>
+                <div class="palette-list">
+                  <div class="palette-item">
+                    <span class="color-chip" style="background-color: #2e88d1;"></span>
+                    <span>#2E88D1 · 蔚藍潮汐 (Ocean Azure)</span>
+                  </div>
+                  <div class="palette-item">
+                    <span class="color-chip" style="background-color: #f7b731;"></span>
+                    <span>#F7B731 · 奇異果金黃 (Kiwi Gold)</span>
+                  </div>
+                  <div class="palette-item">
+                    <span class="color-chip" style="background-color: #c9e8f5;"></span>
+                    <span>#C9E8F5 · 天青粉藍 (Pastel Cyan)</span>
+                  </div>
+                  <div class="palette-item">
+                    <span class="color-chip" style="background-color: #ffffff; border-color: var(--line);"></span>
+                    <span>#FFFFFF · 雛菊純白 (Daisy White)</span>
+                  </div>
+                  <div class="palette-item">
+                    <span class="color-chip" style="background-color: #1a1715;"></span>
+                    <span>#1A1715 · 碳墨深灰 (Carbon Charcoal)</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 規格表 -->
+              <div class="poster-concept-card">
+                <h4 class="font-decor" style="font-size: 0.95rem; color: var(--text); letter-spacing: 1px; margin-bottom: 0.4rem;">
+                  ✦ 作品規格 (SPECIFICATIONS)
+                </h4>
+                <table class="specs-table">
+                  <tbody>
+                    <tr>
+                      <td class="specs-label">作品類型</td>
+                      <td class="specs-val">平面海報 / 數位藝術拼貼 (Digital Collage Poster)</td>
+                    </tr>
+                    <tr>
+                      <td class="specs-label">原始尺寸</td>
+                      <td class="specs-val">1413 × 2000 px (高解析度藝術微噴規格)</td>
+                    </tr>
+                    <tr>
+                      <td class="specs-label">創作工具</td>
+                      <td class="specs-val">Adobe Photoshop · Procreate · Mixed Media</td>
+                    </tr>
+                    <tr>
+                      <td class="specs-label">色彩空間</td>
+                      <td class="specs-val">sRGB · 300 DPI High-Quality Print Ready</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </div>
+
+          </div>
+        </section>
+
+      </div>
            - 財神爺包裝 4 張放一起 (Unit 02)
            - 雞樂園 (Unit 03) 與 香水 (Unit 04) 中間隔開
            - 照片全直角、無浮層遮罩、無註解文字
@@ -1232,11 +2031,13 @@
 
       revealElements.forEach(el => revealObserver.observe(el));
 
-      // 3. 分類切換邏輯（包裝、字體、攝影）
+      // 3. 分類切換邏輯（字體、簡報、海報、包裝、攝影）
       const filterBtns = document.querySelectorAll(".filter-btn");
       const sections = {
-        packaging: document.getElementById("packaging-section"),
         typography: document.getElementById("typography-section"),
+        presentation: document.getElementById("presentation-section"),
+        poster: document.getElementById("poster-section"),
+        packaging: document.getElementById("packaging-section"),
         photography: document.getElementById("photography-section")
       };
 
@@ -1265,6 +2066,11 @@
             }
           }
         });
+
+        // 同步 URL hash，方便外鏈與刷新保持分類
+        if (window.location.hash.replace("#", "") !== category) {
+          history.replaceState(null, null, `#${category}`);
+        }
       }
 
       filterBtns.forEach(btn => {
@@ -1273,7 +2079,7 @@
         });
       });
 
-      // 檢查 URL Hash（如 #typography 或 #packaging）
+      // 檢查 URL Hash（如 #typography 或 #presentation 或 #packaging）
       const initialHash = window.location.hash.replace("#", "");
       if (initialHash && sections[initialHash]) {
         applyFilter(initialHash);
@@ -1390,7 +2196,181 @@
       });
 
       // ========================================================
-      // 5. 燈箱放大預覽 (Lightbox)
+      // 5. 簡報排版播放器控制器 (Presentation Deck Controllers)
+      // ========================================================
+      const deckConfigs = {
+        frida: {
+          total: 29,
+          basePath: 'assets/graphic/presentation/frida/frida-',
+          mainImg: document.getElementById('deck-frida-img'),
+          screen: document.getElementById('deck-frida-screen'),
+          title: document.getElementById('deck-frida-title'),
+          curNum: document.getElementById('deck-frida-cur'),
+          totNum: document.getElementById('deck-frida-tot'),
+          prevBtn: document.getElementById('deck-frida-prev'),
+          nextBtn: document.getElementById('deck-frida-next'),
+          fsBtn: document.getElementById('deck-frida-fs'),
+          thumbsTrack: document.getElementById('deck-frida-thumbs'),
+          titles: {
+            1: '簡報封面 · 芙烈達·卡蘿 視覺研究期中報告',
+            2: '目錄索引 · 六大核心研究主題架構',
+            3: '單元一 · 藝術家生平背景與精神特質',
+            4: '生平轉折 · 車禍受傷與生命藝術的起點',
+            5: '文獻記錄 · 改變世界的藝術密碼紀錄',
+            6: '影像探討 · 畫筆下的自畫像哲思',
+            7: '生平事蹟 · 墨西哥現代主義藝術史脈絡',
+            8: '大事年表 · 1907-1954 關鍵生命軌跡',
+            9: '單元二 · 身心狀態與自畫像轉化',
+            10: '精神投射 · 獨特自畫像中的生命感受揮灑',
+            11: '單元三 · 各時期自畫像演化深度分析',
+            12: '早期時期 · 1926-1935 身份認同與自我探索',
+            13: '早期作品 · 1922 自畫像與原始主義探索',
+            14: '早期作品 · 1926 穿天鵝絨禮服的自畫像',
+            15: '早期作品 · 1931 芙烈達與迪亞哥·里維拉',
+            16: '早期作品 · 1932 亨利·福特醫院的苦痛具象',
+            17: '中期時期 · 1936-1945 情感張力與心理糾葛',
+            18: '中期作品 · 1936 我的祖父母、父母與我',
+            19: '中期作品 · 1939 經典巨作《兩個芙烈達》',
+            20: '中期作品 · 1940 帶猴子的自畫像',
+            21: '中期作品 · 1942 猴子與鸚鵡的象徵意涵',
+            22: '中期作品 · 1944 破碎的脊椎 (La Columna Rota)',
+            23: '晚期時期 · 1946-1954 孤獨痛苦與存在死亡',
+            24: '晚期作品 · 1946 受傷的鹿 (El Venado Herido)',
+            25: '晚期作品 · 1946 雙重自我與命運凝視',
+            26: '晚期作品 · 1949 宇宙的愛之擁抱與墨西哥大地',
+            27: '綜合對比 · 早／中／晚期風格與心境演進光譜',
+            28: '心得總結 · 芙烈達博物館與藝術家核心精神',
+            29: '結語呼告 · 《生命萬歲 Viva la vida》最後的溫柔'
+          }
+        },
+        feng: {
+          total: 24,
+          basePath: 'assets/graphic/presentation/feng/feng-',
+          mainImg: document.getElementById('deck-feng-img'),
+          screen: document.getElementById('deck-feng-screen'),
+          title: document.getElementById('deck-feng-title'),
+          curNum: document.getElementById('deck-feng-cur'),
+          totNum: document.getElementById('deck-feng-tot'),
+          prevBtn: document.getElementById('deck-feng-prev'),
+          nextBtn: document.getElementById('deck-feng-next'),
+          fsBtn: document.getElementById('deck-feng-fs'),
+          thumbsTrack: document.getElementById('deck-feng-thumbs'),
+          titles: {
+            1: '簡報封面 · IF OFFICE 翼翼有限公司 品牌規劃服務',
+            2: '章節引言 · 書籍裝幀設計的理念與突破',
+            3: '書籍裝幀 · 美感細胞《小五國語》六書造字互動封面',
+            4: '互動設計 · 課堂教學摺口與色弱友善配色考量',
+            5: '金獎案例 · 教科圖書設計獎金獎《米米的好朋友》書中書',
+            6: '生活美學 · 《好吃》雜誌系列食材攝影與留白排版',
+            7: '風格飲食 · 《好吃》暖心甜點與輕盈文字律動',
+            8: '概念設計 · 《藏種於農》土地哲學與幾何和諧',
+            9: '裝幀美學 · 市場導向、讀者理解與視覺吸引力平衡',
+            10: '章節引言 · 品牌形象設計與識別系統建構',
+            11: '城市品牌 · 嘉義市全新城市形象識別規劃',
+            12: '字型設計 · 全台首創城市專屬字型「嘉市體」打造',
+            13: '策展識別 · 青春設計節 YDF 2023 視覺規劃',
+            14: '公共事務 · 行政院 TPASS 通勤月票整合視覺設計',
+            15: '線上教育 · Hahow 好學校「拆解知識之門」品牌宇宙',
+            16: '符號系統 · 識別 LOGO 的模組化與多樣性延展',
+            17: '跨界整合 · 公眾事務／生活選物／風格飲食／傳播媒體',
+            18: '餐飲美學 · 永心鳳茶品牌識別與精緻復古氛圍',
+            19: '傳統轉型 · 新勝發餅舖 (sinc5ao) 老店新生的現代面貌',
+            20: '綜藝媒體 · 《綜藝玩很大》MR.PLAYER 冒險熱血精神',
+            21: '章節引言 · 設計思維傳播與線上課程規劃',
+            22: '設計增值 · 打造品牌的影響力：策略性價值創造',
+            23: '核心魔法 · 馮宇的設計增值魔法：商業與美感共創',
+            24: '實務精要 · LOGO 必修課：從市場洞察到提案落地'
+          }
+        }
+      };
+
+      Object.keys(deckConfigs).forEach(deckKey => {
+        const conf = deckConfigs[deckKey];
+        if (!conf.mainImg || !conf.thumbsTrack) return;
+
+        let currentIndex = 1;
+
+        // 生成縮圖
+        conf.thumbsTrack.innerHTML = '';
+        for (let i = 1; i <= conf.total; i++) {
+          const numStr = i < 10 ? `0${i}` : `${i}`;
+          const thumbBtn = document.createElement('button');
+          thumbBtn.className = `deck-thumb-item${i === 1 ? ' active' : ''}`;
+          thumbBtn.dataset.idx = i;
+          thumbBtn.setAttribute('aria-label', `跳至第 ${i} 頁`);
+          thumbBtn.innerHTML = `
+            <img src="${conf.basePath}${numStr}.webp" alt="Slide ${numStr}" loading="lazy">
+            <span class="thumb-num">${numStr}</span>
+          `;
+          thumbBtn.addEventListener('click', () => {
+            goToSlide(i);
+          });
+          conf.thumbsTrack.appendChild(thumbBtn);
+        }
+
+        function updateSlideUI() {
+          const numStr = currentIndex < 10 ? `0${currentIndex}` : `${currentIndex}`;
+          const totalStr = conf.total < 10 ? `0${conf.total}` : `${conf.total}`;
+          const currentTitle = conf.titles[currentIndex] || `投影片 ${numStr}`;
+
+          conf.mainImg.src = `${conf.basePath}${numStr}.webp`;
+          conf.mainImg.alt = currentTitle;
+          if (conf.screen) {
+            conf.screen.dataset.title = `${currentTitle} (${numStr} / ${totalStr})`;
+          }
+          if (conf.title) {
+            conf.title.textContent = `${numStr} / ${totalStr} · ${currentTitle}`;
+          }
+          if (conf.curNum) conf.curNum.textContent = numStr;
+          if (conf.totNum) conf.totNum.textContent = totalStr;
+
+          // 縮圖高亮與自動居中
+          const thumbBtns = conf.thumbsTrack.querySelectorAll('.deck-thumb-item');
+          thumbBtns.forEach(btn => {
+            const isMatch = parseInt(btn.dataset.idx, 10) === currentIndex;
+            btn.classList.toggle('active', isMatch);
+            if (isMatch) {
+              btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+            }
+          });
+
+          // 按鈕狀態控制
+          if (conf.prevBtn) conf.prevBtn.disabled = (currentIndex === 1);
+          if (conf.nextBtn) conf.nextBtn.disabled = (currentIndex === conf.total);
+        }
+
+        function goToSlide(idx) {
+          if (idx < 1) idx = 1;
+          if (idx > conf.total) idx = conf.total;
+          currentIndex = idx;
+          updateSlideUI();
+        }
+
+        if (conf.prevBtn) {
+          conf.prevBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            goToSlide(currentIndex - 1);
+          });
+        }
+        if (conf.nextBtn) {
+          conf.nextBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            goToSlide(currentIndex + 1);
+          });
+        }
+        if (conf.fsBtn) {
+          conf.fsBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if (conf.screen) conf.screen.click();
+          });
+        }
+
+        // 初始化播放器狀態
+        updateSlideUI();
+      });
+
+      // ========================================================
+      // 6. 燈箱放大預覽 (Lightbox)
       // 嚴格遵守：草稿作品照片（.draft-record-card-flat）不參與燈箱、無放大
       // ========================================================
       const lightbox = document.getElementById("lightbox");
